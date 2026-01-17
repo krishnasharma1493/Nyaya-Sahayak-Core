@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyaya-Sahayak - AI Legal First Responder</title>
+
+    <!-- CDN Links -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Grid Background -->
+    <div class="grid-background"></div>
+
+    <!-- ========================================
+         INTRO SCREEN (Cinematic Opening)
+    ======================================== -->
+    <div id="intro-screen">
+        <div class="constitution-image-container">
+            <img src="constitution.jpg" alt="Constitution of India" class="constitution-image">
+        </div>
+        <div class="intro-tagline">
+            Nyaya-Sahayak
+        </div>
+    </div>
+
+    <!-- ========================================
+         MAIN APPLICATION CONTAINER
+    ======================================== -->
+    <div id="app-container" class="hidden" style="position: relative; z-index: 1; min-height: 100vh;">
+
+        <!-- ========================================
+             COMMAND CENTER (Hero Section)
+        ======================================== -->
+        <section id="command-center" class="min-h-screen flex flex-col items-center justify-center p-8">
+            <h1 class="glitch text-5xl md:text-7xl font-bold mb-4 text-center" data-text="NYAYA-SAHAYAK"
+                style="font-family: 'Space Grotesk', sans-serif; background: linear-gradient(135deg, var(--saffron-orange), var(--metallic-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                NYAYA-SAHAYAK
+            </h1>
+            <p class="text-xl md:text-2xl mb-12 text-center opacity-80" style="color: var(--saffron-orange);">
+                AI Legal First Responder // Justice in 30 Seconds
+            </p>
+
+            <!-- AI Core Button -->
+            <div class="ai-core" id="ai-core-btn">
+                <div class="ai-core-inner">
+                    <i class="fas fa-brain"></i>
+                </div>
+            </div>
+
+            <p class="mt-8 text-sm uppercase tracking-widest opacity-60">
+                <i class="fas fa-hand-pointer mr-2"></i> Click to Activate AI Core
+            </p>
+        </section>
+
+        <!-- ========================================
+             UPLOAD INTERFACE (HUD Mode)
+        ======================================== -->
+        <section id="upload-interface" class="hidden min-h-screen flex items-center justify-center p-8">
+            <div class="glass-panel glow max-w-3xl w-full p-8 md:p-12 relative overflow-hidden">
+                <div class="scanning-line"></div>
+
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center"
+                    style="font-family: 'Space Grotesk', sans-serif;">
+                    <i class="fas fa-shield-alt mr-3"></i> UPLOAD EVIDENCE
+                </h2>
+
+                <!-- STACKED LAYOUT (Top to Bottom) -->
+
+                <!-- 1. File Upload Zone (TOP) -->
+                <div class="upload-zone mb-6" id="upload-zone">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Drop your documents here</h3>
+                    <p class="text-sm opacity-70 mb-4">
+                        PDF, Images, Rent Agreements, Bills, Receipts
+                    </p>
+                    <button class="btn-secondary">
+                        <i class="fas fa-folder-open mr-2"></i> Browse Files
+                    </button>
+                    <input type="file" id="file-input" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+
+                <!-- 2. Voice Input Button (MIDDLE) -->
+                <div class="text-center mb-6">
+                    <button class="btn-primary w-full" id="voice-btn">
+                        <i class="fas fa-microphone mr-2"></i> USE VOICE (Hindi/English)
+                    </button>
+                    <p class="text-xs opacity-60 mt-2">
+                        <i class="fas fa-universal-access mr-2"></i> Accessible to everyone, no typing required
+                    </p>
+                </div>
+
+                <!-- 3. Text Mode / AI Comms Button (BOTTOM) -->
+                <div class="text-center">
+                    <button class="btn-secondary-tactical w-full" id="open-terminal-btn">
+                        <i class="fas fa-terminal mr-2"></i> LEGAL AI CHAT (कानूनी सहायता)
+                    </button>
+                    <p class="text-xs opacity-60 mt-2">
+                        <i class="fas fa-language mr-2"></i> हिंदी/English // Voice or Text support
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             PROCESSING STATE (System Logs)
+        ======================================== -->
+        <section id="processing-state" class="hidden min-h-screen flex items-center justify-center p-8">
+            <div class="glass-panel max-w-4xl w-full p-8 md:p-12">
+                <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: 'Space Grotesk', sans-serif;">
+                    <i class="fas fa-cog fa-spin mr-3"></i> AI ANALYSIS IN PROGRESS
+                </h2>
+
+                <div class="system-logs glass-panel p-6" id="system-logs">
+                    <!-- Logs will be dynamically added here -->
+                </div>
+
+                <div class="mt-8 text-center">
+                    <div class="inline-block">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
+                            <div class="w-3 h-3 bg-cyan-400 rounded-full animate-pulse" style="animation-delay: 0.2s;">
+                            </div>
+                            <div class="w-3 h-3 bg-cyan-400 rounded-full animate-pulse" style="animation-delay: 0.4s;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             RESULTS DASHBOARD
+        ======================================== -->
+        <section id="results-dashboard" class="hidden min-h-screen p-4 md:p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4"
+                    style="font-family: 'Space Grotesk', sans-serif; color: var(--metallic-gold);">
+                    <i class="fas fa-gavel mr-3"></i> LEGAL VERDICT
+                </h2>
+                <p class="text-lg opacity-80">Complete Analysis & Recommended Actions</p>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- Left: Win Probability Gauge -->
+                <div class="glass-panel p-8 flex flex-col items-center justify-center">
+                    <h3 class="text-xl font-semibold mb-6 text-center">AI CONFIDENCE</h3>
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" width="250" height="250">
+                            <defs>
+                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color: var(--saffron-orange); stop-opacity: 1" />
+                                    <stop offset="100%" style="stop-color: var(--metallic-gold); stop-opacity: 1" />
+                                </linearGradient>
+                            </defs>
+                            <circle class="gauge-background" cx="125" cy="125" r="100"></circle>
+                            <circle class="gauge-fill" id="gauge-fill" cx="125" cy="125" r="100" stroke-dasharray="628"
+                                stroke-dashoffset="628"></circle>
+                        </svg>
+                        <div class="gauge-value">
+                            <div class="gauge-percentage" id="gauge-percentage">0%</div>
+                            <div class="gauge-label">Win Probability</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-center mt-6 opacity-70">
+                        Based on evidence strength & legal precedents
+                    </p>
+                </div>
+
+                <!-- Center & Right: Legal Notice Document -->
+                <div class="lg:col-span-2 glass-panel p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold">
+                            <i class="fas fa-file-contract mr-2"></i> GENERATED LEGAL NOTICE
+                        </h3>
+                        <button class="btn-secondary" id="download-pdf">
+                            <i class="fas fa-download mr-2"></i> Download PDF
+                        </button>
+                    </div>
+
+                    <div class="legal-notice" id="legal-notice">
+                        <div class="notice-header">
+                            <div class="notice-title">Legal Notice</div>
+                            <div class="notice-ref">Ref: NYS/2026/001 | Date: <span id="notice-date"></span></div>
+                        </div>
+
+                        <div class="notice-body">
+                            <div class="notice-section">
+                                <strong>To:</strong><br>
+                                <span id="notice-to">The Concerned Party</span>
+                            </div>
+
+                            <div class="notice-section">
+                                <strong>Subject:</strong> Legal Notice for Breach of Agreement / Consumer Rights
+                                Violation
+                            </div>
+
+                            <div class="notice-section">
+                                <strong>Dear Sir/Madam,</strong>
+                            </div>
+
+                            <div class="notice-section" id="notice-content">
+                                On behalf of my client, I hereby serve this legal notice under the provisions of the
+                                Consumer Protection Act, 2019, and other applicable laws.
+                                <br><br>
+                                <strong>Facts of the Case:</strong>
+                                <ul style="list-style-type: decimal; margin-left: 20px; margin-top: 10px;">
+                                    <li>The complainant entered into an agreement with your organization on the
+                                        specified date.</li>
+                                    <li>Despite fulfilling all obligations, the complainant has not received the
+                                        promised services/goods.</li>
+                                    <li>Multiple attempts to resolve this matter amicably have been ignored.</li>
+                                </ul>
+                                <br>
+                                <strong>Legal Grounds:</strong> This constitutes a clear violation of Sections 12-18 of
+                                the Consumer Protection Act, 2019, specifically regarding unfair trade practices and
+                                deficiency in service.
+                                <br><br>
+                                <strong>Demand:</strong> You are hereby directed to resolve this dispute within 15 days
+                                of receiving this notice, failing which appropriate legal action including filing a
+                                consumer complaint will be initiated without further notice.
+                            </div>
+
+                            <div class="notice-footer">
+                                <div style="margin-top: 20px;">
+                                    <strong>Yours faithfully,</strong><br>
+                                    <span style="font-style: italic;">Generated by Nyaya-Sahayak AI</span><br>
+                                    Legal First Responder System
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidence Cross-Verification -->
+            <div class="glass-panel p-8 mb-8">
+                <h3 class="text-xl font-semibold mb-4">
+                    <i class="fas fa-search mr-2"></i> EVIDENCE CROSS-VERIFICATION
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-start space-x-4">
+                        <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+                        <div>
+                            <strong>Document Authenticity:</strong> Verified
+                            <p class="text-sm opacity-70">OCR extracted text matches claimed details</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+                        <div>
+                            <strong>Date Consistency:</strong> Verified
+                            <p class="text-sm opacity-70">Timeline is logically consistent</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-2xl"></i>
+                        <div>
+                            <strong>Amount Discrepancy:</strong> Minor Warning
+                            <p class="text-sm opacity-70">Claimed ₹5,000 vs Document shows ₹5,500</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+                        <div>
+                            <strong>Legal Grounds:</strong> Strong
+                            <p class="text-sm opacity-70">IPC Section 420 & Consumer Act applicable</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fraud Heatmap Ticker -->
+            <div class="ticker-container">
+                <div class="ticker-content" id="ticker-content">
+                    <!-- Ticker items will be duplicated for seamless loop -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-8">
+                <button class="btn-primary mr-4" id="new-case-btn">
+                    <i class="fas fa-plus mr-2"></i> New Case
+                </button>
+                <button class="btn-secondary" id="view-govt-dashboard">
+                    <i class="fas fa-chart-line mr-2"></i> Govt Dashboard
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========================================
+         HOLOGRAPHIC TERMINAL OVERLAY (TRICOLOR THEME)
+    ======================================== -->
+    <div id="holographic-terminal" class="hidden">
+        <div class="terminal-window">
+            <!-- Terminal Header -->
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <i class="fas fa-shield-alt mr-2"></i>
+                    <span>NYAYA-SAHAYAK (न्याय-सहायक) // सुरक्षित</span>
+                </div>
+                <div class="terminal-controls">
+                    <button class="terminal-close" id="close-terminal-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Terminal Body (Messages) -->
+            <div class="terminal-body" id="terminal-messages">
+                <div class="terminal-message ai-message">
+                    <div class="message-prefix">[न्याय-सहायक AI]</div>
+                    <div class="message-text">नमस्ते। Secure legal link established. AI ready to assist. Type your query
+                        in Hindi/English or say "help" for commands.</div>
+                </div>
+            </div>
+
+            <!-- Terminal Input -->
+            <div class="terminal-input-container">
+                <div class="terminal-prompt">
+                    <span class="prompt-arrow">›</span>
+                    <input type="text" id="terminal-input" class="terminal-input"
+                        placeholder="Apni samasya batayein / Describe your problem..." autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
