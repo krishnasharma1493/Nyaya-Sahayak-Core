@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyaya Sahayak | The Legal First Responder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-gate">
+        <div class="login-box">
+            <h1 style="color:var(--secondary-gold); margin-bottom:10px;">Nyaya Sahayak</h1>
+            <p style="margin-bottom:20px; color:#ccc;">Secure Legal Assistance Portal</p>
+            
+            <button class="auth-btn google-btn" onclick="simulateLogin()">
+                <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+            <button class="auth-btn ms-btn" onclick="simulateLogin()">
+                <i class="fa-brands fa-microsoft"></i> Continue with Microsoft
+            </button>
+            
+            <p id="login-status" style="margin-top:15px; font-size:0.9rem; opacity:0; color: #4ade80;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Authenticating...
+            </p>
+        </div>
+    </div>
+
+    <div id="main-app" style="display:none;">
+
+        <nav>
+            <div class="logo"><i class="fa-solid fa-scale-balanced"></i> NYAYA SAHAYAK</div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#tool">Notice Generator</a>
+                <a href="#constitution">Constitution</a>
+                <a href="#team">Our Team</a>
+                <a href="#faq">FAQs</a>
+            </div>
+        </nav>
+
+        <header class="hero">
+            <div class="hero-content">
+                <h1>Justice in Your Pocket.</h1>
+                <p>We empower tenants and citizens by analyzing disputes and generating legally sound notices using AI and the Indian Constitution.</p>
+                <a href="#tool" class="cta-btn">Start Legal Check</a>
+            </div>
+        </header>
+
+        <section id="about">
+            <h2 class="section-title">How We Help</h2>
+            <div class="about-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-file-contract"></i>
+                    <h3>Document Analysis</h3>
+                    <p>Upload rent agreements or bills. Our OCR extracts key clauses automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-gavel"></i>
+                    <h3>Legal Validation</h3>
+                    <p>We cross-reference your case with the Model Tenancy Act & Consumer Protection Laws.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <h3>Instant Notice</h3>
+                    <p>Generate a professional legal notice ready to be sent via WhatsApp or Email.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tool" style="background: #e2e8f0;">
+            <h2 class="section-title">Smart Notice Generator</h2>
+            <div class="tool-interface">
+                
+                <div id="upload-step" class="upload-area" onclick="triggerFileUpload()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:3rem; color:var(--text-light);"></i>
+                    <h3>Click to Upload Dispute Document</h3>
+                    <p>(Rent Agreement, Chat Screenshot, Bill)</p>
+                    <div id="loading-bar" style="width:0%; height:4px; background:var(--secondary-gold); margin-top:20px; transition:1s;"></div>
+                </div>
+
+                <div id="result-dashboard">
+                    <div class="dashboard-grid">
+                        <div class="analysis-panel">
+                            <div class="stats-card">
+                                <span style="color:#aaa; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">Success Probability</span>
+                                <span class="success-rate">87%</span>
+                                <span class="badge">Strong Evidence Found</span>
+                            </div>
+
+                            <div class="stats-card">
+                                <h4 style="color:white; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:10px;">Laws Violated</h4>
+                                <ul style="list-style:none; font-size:0.9rem; color:#ccc;">
+                                    <li style="margin-bottom:10px;"><i class="fa-solid fa-gavel" style="color:var(--danger-red)"></i> <strong>Section 108 (TP Act)</strong> - Failure to refund deposit.</li>
+                                    <li><i class="fa-solid fa-shield-halved" style="color:#3b82f6"></i> <strong>Consumer Protection Act 2019</strong> - Unfair trade practice.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="letter-preview">
+                            <img src="https://cdn-icons-png.flaticon.com/512/924/924953.png" class="watermark" alt="scale">
+                            <div class="letter-header">
+                                <span><strong>Ref:</strong> NOTICE/2026/JAN/17</span>
+                                <span><strong>Date:</strong> 17th Jan 2026</span>
+                            </div>
+                            <p><strong>To,<br>Mr. Rajesh Kumar (Landlord),<br>B-12, Sector 62, Noida.</strong></p>
+                            <br>
+                            <h4 style="text-align:center; text-decoration:underline;">LEGAL NOTICE FOR RECOVERY OF SECURITY DEPOSIT</h4>
+                            <br>
+                            <p>Sir,</p>
+                            <p>Under instructions from my client, <strong>Mr. Krishna Sharma</strong>, I hereby serve you with the following legal notice:</p>
+                            <p>1. That my client was a tenant at your property situated at B-12, Sector 62, Noida vide Lease Deed dated 01/01/2025.</p>
+                            <br>
+                            <div style="display:flex; gap:10px;">
+                                <button style="flex:1; padding:10px; background:#333; color:white; border:none; border-radius:5px;">Edit Draft</button>
+                                <button style="flex:1; padding:10px; background:var(--danger-red); color:white; border:none; border-radius:5px;"><i class="fa-brands fa-whatsapp"></i> Send via WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="constitution">
+            <h2 class="section-title">Know Your Rights</h2>
+            <div class="laws-grid">
+                <div class="law-card">
+                    <h3>Article 14</h3>
+                    <p>Equality before law. The State shall not deny to any person equality before the law.</p>
+                    <a href="https://legislative.gov.in/constitution-of-india" target="_blank" class="external-link">Read Full Text &rarr;</a>
+                </div>
+                <div class="law-card">
+                    <h3>Model Tenancy Act</h3>
+                    <p>Standardizes rental agreements and protects interests of landlords and tenants.</p>
+                    <a href="#" class="external-link">View Summary &rarr;</a>
+                </div>
+                <div class="law-card">
+                    <h3>Right to Information</h3>
+                    <p>Empowers citizens to ask questions to the government and brings transparency.</p>
+                    <a href="#" class="external-link">File RTI &rarr;</a>
+                </div>
+                <div class="law-card">
+                    <h3>Article 21</h3>
+                    <p>Protection of life and personal liberty. No person shall be deprived of his life.</p>
+                    <a href="#" class="external-link">Read Full Text &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" style="background: white;">
+            <h2 class="section-title">The Legal Tech Team</h2>
+            <div class="team-container">
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Bhumi+Kansal&background=0D8ABC&color=fff" class="avatar" alt="Bhumi">
+                    <h4>Bhumi Kansal</h4>
+                    <div class="socials"><a href="#"><i class="fa-brands fa-linkedin"></i></a> <a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Krishna+Sharma&background=0D8ABC&color=fff" class="avatar" alt="Krishna">
+                    <h4>Krishna Sharma</h4>
+                    <div class="socials"><a href="#"><i class="fa-brands fa-linkedin"></i></a> <a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Mayank+Balyan&background=0D8ABC&color=fff" class="avatar" alt="Mayank">
+                    <h4>Mayank Balyan</h4>
+                    <div class="socials"><a href="#"><i class="fa-brands fa-linkedin"></i></a> <a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                 <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Shreyas+Singh&background=0D8ABC&color=fff" class="avatar" alt="Shreyas">
+                    <h4>Shreyas Singh</h4>
+                    <div class="socials"><a href="#"><i class="fa-brands fa-linkedin"></i></a> <a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+                 <div class="team-member">
+                    <img src="https://ui-avatars.com/api/?name=Vishal+Singh&background=0D8ABC&color=fff" class="avatar" alt="Vishal">
+                    <h4>Vishal Singh</h4>
+                    <div class="socials"><a href="#"><i class="fa-brands fa-linkedin"></i></a> <a href="#"><i class="fa-brands fa-github"></i></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container" style="max-width: 800px; margin: 0 auto;">
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">What documents do I need to upload? <i class="fa-solid fa-plus faq-icon"></i></div>
+                    <div class="faq-answer"><p>You can upload your Rent Agreement, Security Deposit Receipt, or screenshots of WhatsApp chats with your landlord.</p></div>
+                </div>
+
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">Is the generated notice legally binding? <i class="fa-solid fa-plus faq-icon"></i></div>
+                    <div class="faq-answer"><p>Yes, the notice is drafted based on standard Indian legal formats. However, for high-stakes cases, we recommend consulting a lawyer.</p></div>
+                </div>
+
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">Is my data secure? <i class="fa-solid fa-plus faq-icon"></i></div>
+                    <div class="faq-answer"><p>Absolutely. We use Google Cloud encryption to process your documents, and they are deleted after the session.</p></div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer style="background:var(--primary-navy); color:white; text-align:center; padding:2rem;">
+            <p>© 2026 Nyaya Sahayak | Faculty of Technology, University of Delhi</p>
+        </footer>
+
+        <div class="chat-toggle" onclick="toggleChat()">
+            <i class="fa-solid fa-comments"></i>
+        </div>
+
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <span>Nyaya Assistant</span>
+                <span onclick="toggleChat()" style="cursor:pointer;">&times;</span>
+            </div>
+            <div class="chat-body">
+                <p style="background:#eee; padding:10px; border-radius:5px; margin-bottom:10px;">Hello! I can answer questions about Indian Law. Try asking "What are tenant rights?"</p>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your legal query...">
+                <button style="border:none; background:var(--primary-navy); color:white; padding:0 10px; border-radius:4px; margin-left:5px;">Send</button>
+            </div>
+        </div>
+
+    </div> <script src="script.js"></script>
+</body>
+</html>
