@@ -1,0 +1,1024 @@
+/* ========================================
+   INDIAN CONSUMER THEME - COLOR SYSTEM
+   Inspired by Indian Tricolor & Judiciary
+======================================== */
+:root {
+    /* Base Colors - Deep Navy (Judicial System) */
+    --void-blue: #0a1628;
+    --deep-void: #050b14;
+
+    /* Primary Accent - Saffron (Indian Flag) */
+    --saffron-orange: #FF9933;
+    --saffron-glow: rgba(255, 153, 51, 0.6);
+
+    /* Secondary Accent - India Green (Indian Flag) */
+    --india-green: #138808;
+    --india-green-glow: rgba(19, 136, 8, 0.5);
+
+    /* Tertiary - Justice Gold */
+    --metallic-gold: #ffd700;
+    --gold-dark: #b8860b;
+
+    /* UI Elements */
+    --grid-overlay: rgba(255, 153, 51, 0.08);
+    --glass-bg: rgba(10, 22, 40, 0.75);
+    --glass-border: rgba(255, 153, 51, 0.35);
+
+    /* Cyber Effects */
+    --neon-cyan: #00eaff;
+    --neon-cyan-glow: rgba(0, 234, 255, 0.8);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--void-blue);
+    color: var(--saffron-orange);
+    overflow-x: hidden;
+    min-height: 100vh;
+    animation: crtFlicker 0.15s infinite alternate;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ========================================
+   CRT OVERLAY & EFFECTS
+======================================== */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15) 0px,
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 9998;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center,
+            transparent 0%,
+            transparent 50%,
+            rgba(0, 0, 0, 0.3) 90%,
+            rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+@keyframes crtFlicker {
+    0% {
+        opacity: 0.97;
+    }
+
+    50% {
+        opacity: 0.98;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   GRID OVERLAY BACKGROUND
+======================================== */
+.grid-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(var(--grid-overlay) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-overlay) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes gridMove {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+/* ========================================
+   GLASSMORPHISM CONTAINERS
+======================================== */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(255, 153, 51, 0.15);
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
+}
+
+.glass-panel.glow {
+    box-shadow: 0 0 40px var(--saffron-glow),
+        0 8px 32px rgba(255, 153, 51, 0.25);
+}
+
+/* ========================================
+   INTRO SCREEN
+======================================== */
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--deep-void) 0%, var(--void-blue) 100%);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.constitution-image-container {
+    width: 400px;
+    height: 500px;
+    position: relative;
+    perspective: 2000px;
+    animation: imageFloat 3s ease-in-out;
+}
+
+.constitution-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 80px rgba(255, 215, 0, 0.6),
+        0 0 40px rgba(255, 153, 51, 0.4);
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    animation: bookOpeningAnimation 3s ease-in-out forwards;
+}
+
+@keyframes imageFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40%,
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes bookOpeningAnimation {
+    0% {
+        transform: scale(0.9) rotateY(0deg);
+        opacity: 0;
+        filter: brightness(0.8);
+    }
+
+    20% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    30% {
+        transform: scale(1) rotateY(0deg);
+    }
+
+    50% {
+        transform: scale(1.05) rotateY(-25deg);
+    }
+
+    70% {
+        transform: scale(1.05) rotateY(25deg);
+    }
+
+    85% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.1) rotateY(0deg);
+        opacity: 0;
+        filter: blur(3px) brightness(1.2);
+    }
+}
+
+.intro-tagline {
+    margin-top: 40px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--saffron-orange);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 1.5s forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   GLITCH TITLE EFFECT
+======================================== */
+.glitch {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    animation: glitch-1 2.5s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-2px, -2px);
+    opacity: 0.8;
+    color: var(--saffron-orange);
+}
+
+.glitch::after {
+    animation: glitch-2 2.5s infinite;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+    color: var(--india-green);
+}
+
+@keyframes glitch-1 {
+
+    0%,
+    100% {
+        transform: translate(0);
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+
+    20% {
+        transform: translate(-3px, 2px);
+        clip-path: polygon(0 15%, 100% 15%, 100% 65%, 0 65%);
+    }
+
+    40% {
+        transform: translate(-2px, -1px);
+        clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%);
+    }
+
+    60% {
+        transform: translate(2px, 1px);
+        clip-path: polygon(0 5%, 100% 5%, 100% 75%, 0 75%);
+    }
+
+    80% {
+        transform: translate(-1px, -2px);
+        clip-path: polygon(0 35%, 100% 35%, 100% 85%, 0 85%);
+    }
+}
+
+@keyframes glitch-2 {
+
+    0%,
+    100% {
+        transform: translate(0);
+        clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    }
+
+    20% {
+        transform: translate(2px, -2px);
+        clip-path: polygon(0 35%, 100% 35%, 100% 95%, 0 95%);
+    }
+
+    40% {
+        transform: translate(3px, 1px);
+        clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    }
+
+    60% {
+        transform: translate(-2px, -1px);
+        clip-path: polygon(0 45%, 100% 45%, 100% 90%, 0 90%);
+    }
+
+    80% {
+        transform: translate(1px, 2px);
+        clip-path: polygon(0 20%, 100% 20%, 100% 80%, 0 80%);
+    }
+}
+
+/* ========================================
+   AI CORE PULSING BUTTON
+======================================== */
+.ai-core {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--saffron-orange) 0%, transparent 70%);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
+}
+
+.ai-core:hover {
+    transform: scale(1.05);
+}
+
+.ai-core::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    border: 2px solid var(--saffron-orange);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.ai-core::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 50%;
+    border: 1px solid var(--india-green);
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out 0.5s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.5;
+    }
+}
+
+.ai-core-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: var(--saffron-orange);
+    text-shadow: 0 0 20px var(--saffron-glow);
+}
+
+/* ========================================
+   SCANNING LINE
+======================================== */
+.scanning-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--saffron-orange), transparent);
+    animation: scan 2s linear infinite;
+    box-shadow: 0 0 10px var(--saffron-glow);
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(500px);
+    }
+}
+
+/* ========================================
+   SYSTEM LOGS
+======================================== */
+.system-logs {
+    height: 300px;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--saffron-orange);
+    position: relative;
+}
+
+.log-line {
+    opacity: 0;
+    animation: logAppear 0.5s forwards;
+    padding: 4px 0;
+}
+
+@keyframes logAppear {
+    to {
+        opacity: 1;
+    }
+}
+
+.log-line::before {
+    content: '> ';
+    color: var(--metallic-gold);
+}
+
+/* ========================================
+   WIN PROBABILITY GAUGE
+======================================== */
+.gauge-container {
+    width: 250px;
+    height: 250px;
+    position: relative;
+}
+
+.gauge-svg {
+    transform: rotate(-90deg);
+}
+
+.gauge-background {
+    fill: none;
+    stroke: rgba(255, 153, 51, 0.1);
+    stroke-width: 20;
+}
+
+.gauge-fill {
+    fill: none;
+    stroke: url(#gaugeGradient);
+    stroke-width: 20;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 2s ease-out;
+}
+
+.gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.gauge-percentage {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--metallic-gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.gauge-label {
+    font-size: 14px;
+    color: var(--saffron-orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 8px;
+}
+
+/* ========================================
+   LEGAL NOTICE DOCUMENT
+======================================== */
+.legal-notice {
+    background: linear-gradient(135deg, #fafafa 0%, #e8e8e8 100%);
+    color: #1a1a1a;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    font-family: 'Times New Roman', serif;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.notice-header {
+    text-align: center;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.notice-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.notice-ref {
+    font-size: 12px;
+    color: #666;
+}
+
+.notice-body {
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.notice-section {
+    margin-bottom: 20px;
+}
+
+.notice-footer {
+    margin-top: 40px;
+    text-align: right;
+}
+
+/* ========================================
+   FRAUD HEATMAP TICKER
+======================================== */
+.ticker-container {
+    width: 100%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+    border-top: 1px solid var(--glass-border);
+    padding: 12px 0;
+}
+
+.ticker-content {
+    display: flex;
+    animation: tickerScroll 30s linear infinite;
+    white-space: nowrap;
+}
+
+@keyframes tickerScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 60px;
+    font-size: 14px;
+}
+
+.ticker-icon {
+    color: var(--metallic-gold);
+    margin-right: 10px;
+}
+
+.ticker-location {
+    color: var(--saffron-orange);
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.ticker-count {
+    color: #ff4444;
+    font-weight: 700;
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+.btn-primary {
+    background: linear-gradient(135deg, var(--saffron-orange) 0%, var(--india-green) 100%);
+    color: var(--void-blue);
+    border: none;
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px var(--saffron-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px var(--saffron-glow);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--saffron-orange);
+    border: 2px solid var(--saffron-orange);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--saffron-orange);
+    color: var(--void-blue);
+}
+
+/* NEW: Tactical Terminal Button (Saffron Orange) */
+.btn-secondary-tactical {
+    background: transparent;
+    color: var(--saffron-orange);
+    border: 2px solid var(--saffron-orange);
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px var(--saffron-glow);
+}
+
+.btn-secondary-tactical:hover {
+    background: var(--saffron-orange);
+    color: var(--void-blue);
+    box-shadow: 0 0 20px var(--saffron-glow);
+}
+
+/* ========================================
+   FILE UPLOAD ZONE
+======================================== */
+.upload-zone {
+    border: 3px dashed var(--glass-border);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+    border-color: var(--saffron-orange);
+    background: rgba(255, 153, 51, 0.05);
+}
+
+.upload-icon {
+    font-size: 64px;
+    color: var(--saffron-orange);
+    margin-bottom: 20px;
+}
+
+/* ========================================
+   HOLOGRAPHIC TERMINAL (INDIAN TRICOLOR THEME)
+======================================== */
+#holographic-terminal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 11, 20, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: materialize 0.5s ease-out;
+}
+
+@keyframes materialize {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.terminal-window {
+    width: 90%;
+    max-width: 900px;
+    height: 80vh;
+    background: rgba(10, 22, 40, 0.9);
+    border: 2px solid var(--saffron-orange);
+    border-radius: 12px;
+    box-shadow: 0 0 60px var(--saffron-glow),
+        inset 0 0 40px rgba(255, 153, 51, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Ashoka Chakra Pattern Overlay */
+.terminal-window::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 50% 50%, transparent 30%, rgba(255, 153, 51, 0.03) 30%, rgba(255, 153, 51, 0.03) 31%, transparent 31%),
+        repeating-conic-gradient(from 0deg at 50% 50%,
+            transparent 0deg,
+            transparent 14deg,
+            rgba(255, 153, 51, 0.05) 14deg,
+            rgba(255, 153, 51, 0.05) 15deg);
+    background-size: 400px 400px;
+    background-position: center;
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.terminal-header {
+    background: linear-gradient(90deg, rgba(255, 153, 51, 0.2), rgba(19, 136, 8, 0.2));
+    border-bottom: 1px solid var(--saffron-orange);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.terminal-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: var(--saffron-orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--saffron-glow);
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.terminal-close {
+    background: transparent;
+    border: 1px solid var(--saffron-orange);
+    color: var(--saffron-orange);
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.terminal-close:hover {
+    background: var(--saffron-orange);
+    color: var(--void-blue);
+    box-shadow: 0 0 10px var(--saffron-glow);
+}
+
+.terminal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+}
+
+.terminal-message {
+    margin-bottom: 20px;
+    animation: terminalFadeIn 0.3s ease-out;
+}
+
+@keyframes terminalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* AI Messages (Left, Saffron Orange, Monospace) */
+.ai-message {
+    text-align: left;
+}
+
+.ai-message .message-prefix {
+    color: var(--saffron-orange);
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-shadow: 0 0 10px var(--saffron-glow);
+}
+
+.ai-message .message-text {
+    color: var(--saffron-orange);
+    opacity: 0.9;
+    white-space: pre-wrap;
+}
+
+/* User Messages (Right, India Green, Sans-serif) */
+.user-message {
+    text-align: right;
+}
+
+.user-message .message-prefix {
+    color: var(--india-green);
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    text-shadow: 0 0 10px var(--india-green-glow);
+}
+
+.user-message .message-text {
+    color: #ffffff;
+    opacity: 0.95;
+    font-family: 'Inter', sans-serif;
+}
+
+.terminal-input-container {
+    border-top: 1px solid var(--saffron-orange);
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.terminal-prompt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.prompt-arrow {
+    color: var(--saffron-orange);
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--saffron-orange);
+    color: #ffffff;
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    padding: 8px 0;
+    outline: none;
+}
+
+.terminal-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Inter', sans-serif;
+}
+
+.terminal-input:focus {
+    border-bottom-color: var(--metallic-gold);
+    box-shadow: 0 2px 10px var(--saffron-glow);
+}
+
+/* Typing Indicator */
+.typing-indicator {
+    display: inline-block;
+    animation: blink 0.8s infinite;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+@media (max-width: 768px) {
+    .ai-core {
+        width: 150px;
+        height: 150px;
+    }
+
+    .gauge-container {
+        width: 180px;
+        height: 180px;
+    }
+
+    .gauge-percentage {
+        font-size: 36px;
+    }
+
+    .legal-notice {
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    .notice-title {
+        font-size: 18px;
+    }
+
+    .intro-tagline {
+        font-size: 18px;
+    }
+
+    .terminal-window {
+        width: 95%;
+        height: 85vh;
+    }
+
+    .terminal-body {
+        font-size: 12px;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+======================================== */
+.hidden {
+    display: none !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.slide-up {
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
