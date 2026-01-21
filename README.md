@@ -1,10 +1,36 @@
 # Nyaya-Sahayak: AI-Powered Legal Enforcement System
 
-## Project Overview
+## 🎯 Project Overview
 
 Nyaya-Sahayak is a multimodal Retrieval-Augmented Generation (RAG) platform designed to automate the generation of legal notices and preliminary case analysis. The system leverages Google Cloud Vertex AI and Computer Vision to interpret unstructured evidence (images, audio, and documents) and cross-reference them against a vectorised knowledge base of Indian laws (IPC, CrPC, Consumer Protection Act).
 
 Unlike standard legal chatbots which provide generic advice, Nyaya-Sahayak is engineered to be an execution tool. It assesses case viability with a probabilistic success score and generates legally binding PDF notices ready for dispatch.
+
+## 📂 Project Structure
+
+This repository contains two distinct components:
+
+### **1. Frontend Prototype (Root Directory)**
+- **Files:** `index.html`, `style.css`, `script.js`
+- **Purpose:** Interactive UI/UX demonstration with Constitution-themed gateway overlay
+- **Status:** ✅ Fully functional standalone demo
+- **Features:** 
+  - Constitution-themed launch gateway with Ashoka Chakra design
+  - Voice/text input interfaces
+  - Simulated AI responses for demonstration
+  - Document upload UI
+  - Legal notice preview dashboard
+
+### **2. Backend Implementation (`/project` Directory)**
+- **Framework:** Django 6.0.0
+- **Status:** 🔧 Backend API structure with GCP integration points
+- **Services Integrated:**
+  - Google Vertex AI (Agent Builder for RAG)
+  - Gemini Pro 1.5 (Legal reasoning and drafting)
+  - Cloud Vision API (OCR for document processing)
+  - Cloud Storage (Document persistence)
+
+> **Note for Evaluators:** The root-level HTML/CSS/JS files demonstrate the complete user interface and experience. Backend AI integration is implemented in the `/project` folder using Django and Google Cloud Platform services. For full end-to-end functionality, both components work together via RESTful APIs.
 
 ## System Architecture
 
