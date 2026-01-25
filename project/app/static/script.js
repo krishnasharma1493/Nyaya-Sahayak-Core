@@ -532,7 +532,7 @@ function escapeHtml(text) {
 }
 
 // Process User Query and Generate AI Response
-// Process User Query and Generate AI Response
+
 async function processQuery(query) {
     try {
         console.log('Sending request to /api/chat/ with message:', query);

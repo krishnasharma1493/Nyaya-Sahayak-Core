@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&display=swap"
         rel="stylesheet">
 
     <!-- Custom Stylesheet -->
@@ -20,6 +20,84 @@
 <body>
     <!-- Grid Background -->
     <div class="grid-background"></div>
+
+    <!-- ========================================
+    <!-- ========================================
+         LAUNCH GATEWAY OVERLAY (Constitution Theme)
+    ======================================== -->
+    <div id="launch-gateway" class="launch-gateway">
+        <!-- Background Pattern -->
+        <div class="gateway-bg-pattern"></div>
+
+        <!-- Ashoka Chakra Watermark -->
+        <div class="ashoka-chakra"></div>
+
+        <!-- Main Content -->
+        <div class="gateway-content">
+            <!-- Shield/Security Icon -->
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure & Confidential</span>
+            </div>
+
+            <!-- Hero Section -->
+            <div class="gateway-hero">
+                <h1 class="gateway-headline">
+                    <span class="brand-name">NYAYA-SAHAYAK</span><br>
+                    <span class="highlight-text">THE LEGAL FIRST-RESPONDER</span>
+                </h1>
+                <p class="gateway-subheadline">
+                    Network Yielding AI for Justice & Awareness Sahayak<br>
+                    <span class="team-credit">Smart Education | University of Delhi</span>
+                </p>
+
+                <!-- CTA Button -->
+                <button class="gateway-cta" id="gateway-enter-btn">
+                    <i class="fas fa-lock-open mr-3"></i>
+                    Enter Secure Portal
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </button>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="gateway-quick-links">
+                <a href="#" class="gateway-link" data-section="about">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>About the Project</span>
+                </a>
+                <a href="#" class="gateway-link" data-section="rights">
+                    <i class="fas fa-book"></i>
+                    <span>Know Your Rights</span>
+                </a>
+                <a href="#" class="gateway-link" data-section="mission">
+                    <i class="fas fa-gavel"></i>
+                    <span>Our Objectives</span>
+                </a>
+                <a href="#" class="gateway-link" data-section="privacy">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Privacy Promise</span>
+                </a>
+            </div>
+
+            <!-- Footer Trust Badge -->
+            <div class="gateway-footer">
+                <div class="trust-badges">
+                    <span class="badge-item">
+                        <i class="fas fa-balance-scale"></i>
+                        Constitutional Integrity
+                    </span>
+                    <span class="badge-item">
+                        <i class="fas fa-encrypt"></i>
+                        End-to-End Encrypted
+                    </span>
+                    <span class="badge-item">
+                        <i class="fas fa-indian-rupee-sign"></i>
+                        Made in India
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ========================================
          INTRO SCREEN (Cinematic Opening)
@@ -323,25 +401,40 @@
             <!-- Terminal Body (Messages) -->
             <div class="terminal-body" id="terminal-messages">
                 <div class="terminal-message ai-message">
-                    <div class="message-prefix">[न्याय-सहायक AI]</div>
-                    <div class="message-text">नमस्ते। Secure legal link established. AI ready to assist. Type your query
-                        in Hindi/English or say "help" for commands.</div>
+                    <div class="terminal-message ai-message">
+                        <div class="message-prefix">[SYSTEM NOTICE]</div>
+                        <div class="message-text"
+                            style="color: #ffd700; font-weight: 500; border-left: 3px solid #ffd700; padding-left: 10px; margin-bottom: 15px;">
+                            ⚙️ DEMO MODE - FRONTEND PROTOTYPE<br>
+                            This interface demonstrates UI/UX capabilities. Full backend integration with Google Vertex
+                            AI,
+                            Gemini Pro 1.5, and Cloud Vision API is implemented separately in the Django backend
+                            (/project
+                            folder).<br>
+                            Current responses are simulated for demonstration purposes.
+                        </div>
+                    </div>
+                    <div class="terminal-message ai-message">
+                        <div class="message-prefix">[न्याय-सहायक AI]</div>
+                        <div class="message-text">नमस्ते। Secure legal link established. AI ready to assist. Type your
+                            query
+                            in Hindi/English or say "help" for commands.</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Terminal Input -->
-            <div class="terminal-input-container">
-                <div class="terminal-prompt">
-                    <span class="prompt-arrow">›</span>
-                    <input type="text" id="terminal-input" class="terminal-input"
-                        placeholder="Apni samasya batayein / Describe your problem..." autocomplete="off" />
+                <!-- Terminal Input -->
+                <div class="terminal-input-container">
+                    <div class="terminal-prompt">
+                        <span class="prompt-arrow">›</span>
+                        <input type="text" id="terminal-input" class="terminal-input"
+                            placeholder="Apni samasya batayein / Describe your problem..." autocomplete="off" />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Custom Script -->
-    <script src="script.js"></script>
+        <!-- Custom Script -->
+        <script src="script.js"></script>
 </body>
 
 </html>
