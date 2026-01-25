@@ -1,0 +1,59 @@
+# Implementation Plan - Legal Document Analysis with Vertex AI
+
+This plan outlines the steps to integrate Vertex AI into the Nyaya-Sahayak project to enable real-time analysis of uploaded legal documents.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Vertex AI Requirements**:
+> - You must have a Google Cloud Project with Vertex AI API enabled.
+> - Authentication credentials (service account JSON or `gcloud auth application-default login`) must be set up on the machine/environment running the Django server.
+> - The `google-cloud-aiplatform` python package will need to be installed.
+
+## Proposed Changes
+
+### Backend (Django)
+
+#### [MODIFY] [views.py](file:///c:/Users/mayank/Desktop/Nyaya-Sahayak-Core/project/app/views.py)
+- Import `google.cloud.aiplatform` and `vertexai.generative_models`.
+- Create a new view function `analyze_document(request)` that:
+    1.  Accepts POS requests with a file upload (`request.FILES`).
+    2.  Saves the uploaded file temporarily.
+    3.  Initializes the Vertex AI Gemini model.
+    4.  Sends the file to Gemini for analysis with a specific legal prompt (e.g., "Analyze this legal document, identify key clauses, risks, and provide a summary").
+    5.  Returns the analysis result as a JSON response.
+
+#### [MODIFY] [urls.py](file:///c:/Users/mayank/Desktop/Nyaya-Sahayak-Core/project/app/urls.py)
+- Add a new path `path('api/analyze/', views.analyze_document, name='analyze_document')` to route the upload request.
+
+### Frontend
+
+#### [MODIFY] [script.js](file:///c:/Users/mayank/Desktop/Nyaya-Sahayak-Core/project/app/static/script.js)
+- Update the [simulateProcessing](file:///c:/Users/mayank/Desktop/Nyaya-Sahayak-Core/project/app/static/script.js#204-245) function (or create a new `processDocument` function) to:
+    1.  Create a `FormData` object with the selected file.
+    2.  Use `fetch('/api/analyze/', ...)` to send the file to the backend.
+    3.  Update the UI logs to reflect real progress (e.g., "Uploading...", "Waiting for AI analysis...").
+    4.  Receive the JSON response.
+    5.  Populate the `results-dashboard` with the actual data received from Vertex AI instead of hardcoded simulation data.
+- Ensure CSRF token is included in the `fetch` request headers.
+
+## Verification Plan
+
+### Automated Tests
+- None currently exist for this feature.
+- We will rely on manual verification as this involves external API calls (Vertex AI) and UI interaction.
+
+### Manual Verification
+1.  **Setup**:
+    - Ensure `google-cloud-aiplatform` is installed: `pip install google-cloud-aiplatform`.
+    - Authenticate with Google Cloud.
+    - Start the Django server: `python manage.py runserver`.
+2.  **Upload Test**:
+    - Open the application in the browser.
+    - Click "Activate AI Core" -> "Upload Evidence".
+    - Select a sample legal PDF or Image.
+    - Check the "System Logs" panel; it should show real activity (not just the simulated timer).
+3.  **Result Verification**:
+    - Wait for the analysis to complete.
+    - Verify that the specific text/analysis from the uploaded document appears in the "Legal Verdict" and "Analysis" sections.
+    - Confirm NO console errors in the browser.

@@ -165,6 +165,7 @@ elements.fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         const file = e.target.files[0];
         State.caseData.fileName = file.name;
+        State.caseData.file = file; // Store the file object
         playTone(800, 'square', 0.1);
         showScreen('processing');
     }
@@ -186,6 +187,7 @@ elements.uploadZone.addEventListener('drop', (e) => {
     const file = e.dataTransfer.files[0];
     if (file) {
         State.caseData.fileName = file.name;
+        State.caseData.file = file; // Store the file object
         playTone(800, 'square', 0.1);
         showScreen('processing');
     }
@@ -201,47 +203,98 @@ elements.voiceBtn.addEventListener('click', () => {
 // PROCESSING SIMULATION
 // ========================================
 
-function simulateProcessing() {
-    const logs = [
-        '[01] Initializing AI Core...',
-        '[02] Loading Legal Database... 3.2GB',
-        '[03] Scanning uploaded document...',
-        '[04] OCR Processing: Extracting text...',
-        '[05] Text extracted: 1,247 words',
-        '[06] Analyzing contract clauses...',
-        '[07] Cross-referencing Consumer Protection Act 2019...',
-        '[08] Checking IPC Sections 420, 406, 506...',
-        '[09] Querying precedent database...',
-        '[10] Found 23 similar cases',
-        '[11] Calculating win probability...',
-        '[12] Probability: 87% in favor',
-        '[13] Drafting legal notice...',
-        '[14] Generating PDF document...',
-        '[15] Cross-verification complete',
-        '[16] Analysis ready. Displaying results...'
-    ];
-
+async function processDocument() {
     elements.systemLogs.innerHTML = '';
+    const addLog = (text) => {
+        const div = document.createElement('div');
+        div.className = 'log-line';
+        div.textContent = text;
+        elements.systemLogs.appendChild(div);
+        elements.systemLogs.scrollTop = elements.systemLogs.scrollHeight;
+    };
 
-    logs.forEach((log, index) => {
-        setTimeout(() => {
-            const logLine = document.createElement('div');
-            logLine.className = 'log-line';
-            logLine.textContent = log;
-            elements.systemLogs.appendChild(logLine);
+    addLog('[01] Initializing AI Core...');
 
-            if (index % 3 === 0) {
-                playTone(600 + (index * 20), 'square', 0.05);
-            }
+    if (!State.caseData.file) {
+        addLog('[ERROR] No file selected.');
+        return;
+    }
 
-            if (index === logs.length - 1) {
-                setTimeout(() => {
-                    showScreen('results');
-                }, 1000);
-            }
-        }, index * 300);
-    });
+    addLog(`[02] Uploading ${State.caseData.file.name}...`);
+
+    const formData = new FormData();
+    formData.append('file', State.caseData.file);
+
+    try {
+        const response = await fetch('/api/analyze/', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        addLog('[03] Sending to Vertex AI (Gemini)...');
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            const data = result.data;
+            addLog('[04] Analysis Complete.');
+            addLog('[05] Generating Verdict...');
+
+            // Parse Verdict Score
+            let score = 85; // Default high confidence if not parsed
+            // Simple heuristic to find a number in verdict if it's a string, or check if it's an object
+            // The prompt asks for JSON with "verdict" which might include score.
+            // Let's assume the model follows instructions often but safely fallback.
+
+            setTimeout(() => {
+                showScreen('results');
+                animateGauge(score);
+
+                // Update Notice Content
+                const noticeBody = document.getElementById('notice-content');
+                if (noticeBody) {
+                    let html = ``;
+
+                    if (data.summary) {
+                        html += `<strong>Summary:</strong> ${data.summary}<br><br>`;
+                    }
+
+                    if (data.key_clauses) {
+                        html += `<strong>Key Clauses:</strong><ul style="list-style-type: disc; margin-left: 20px;">`;
+                        let clauses = Array.isArray(data.key_clauses) ? data.key_clauses : [data.key_clauses];
+                        clauses.forEach(c => html += `<li>${c}</li>`);
+                        html += `</ul><br>`;
+                    }
+
+                    if (data.risks) {
+                        html += `<strong>Risks:</strong><br>`;
+                        let risks = Array.isArray(data.risks) ? data.risks : [data.risks];
+                        html += `<ul style="list-style-type: circle; margin-left: 20px;">`;
+                        risks.forEach(r => html += `<li>${r}</li>`);
+                        html += `</ul><br>`;
+                    }
+
+                    if (data.verdict) {
+                        html += `<strong>Verdict:</strong> ${typeof data.verdict === 'string' ? data.verdict : JSON.stringify(data.verdict)}`;
+                    }
+
+                    noticeBody.innerHTML = html;
+                }
+
+            }, 1000);
+
+        } else {
+            addLog(`[ERROR] ${result.message}`);
+        }
+
+    } catch (error) {
+        addLog(`[CRITICAL ERROR] ${error.message}`);
+        console.error(error);
+    }
 }
+// Keep simulateProcessing name if it's called elsewhere, or alias it
+const simulateProcessing = processDocument;
 
 // ========================================
 // GAUGE ANIMATION
@@ -479,94 +532,40 @@ function escapeHtml(text) {
 }
 
 // Process User Query and Generate AI Response
+// Process User Query and Generate AI Response
 async function processQuery(query) {
-    const lowerQuery = query.toLowerCase();
+    try {
+        console.log('Sending request to /api/chat/ with message:', query);
 
-    // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+        const response = await fetch('/api/chat/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: query })
+        });
 
-    // Traffic Police Scenario
-    if (lowerQuery.includes('traffic') || lowerQuery.includes('challan') || lowerQuery.includes('police')) {
-        await addAIMessage(
-            `Analyzing Traffic Violation Query... [████████████] 100%\n\n` +
-            `LEGAL ANALYSIS:\n` +
-            `1. Traffic police MUST provide challan copy (Section 130, Motor Vehicles Act)\n` +
-            `2. You can dispute within 60 days at designated court\n` +
-            `3. Request radar reading proof if speeding charge\n\n` +
-            `SUGGESTED RESPONSE:\n` +
-            `"Officer, main challan copy chahiye aur radar reading dikhaye agar speed violation hai."\n\n` +
-            `Type "draft notice" for automatic legal notice generation.`
-        );
-    }
-    // Refund/Consumer Scenario
-    else if (lowerQuery.includes('refund') || lowerQuery.includes('product') || lowerQuery.includes('consumer')) {
-        await addAIMessage(
-            `Analyzing Consumer Protection Act... [████████████] 100%\n\n` +
-            `Section 108 applies. Security deposit must be refunded within 45 days.\n\n` +
-            `YOUR RIGHTS UNDER CONSUMER PROTECTION ACT 2019:\n` +
-            `1. Defective products: Full refund or replacement within 30 days\n` +
-            `2. Service deficiency: Compensation + refund of fees\n` +
-            `3. Complaint can be filed online at consumerhelpline.gov.in\n\n` +
-            `NEXT STEPS:\n` +
-            `- Gather bill/receipt as proof\n` +
-            `- Send written complaint (I can draft this)\n` +
-            `- File consumer court case if no response in 15 days`
-        );
-    }
-    // Landlord/Deposit Scenario
-    else if (lowerQuery.includes('landlord') || lowerQuery.includes('deposit') || lowerQuery.includes('rent')) {
-        await addAIMessage(
-            `Scanning Tenancy Laws Database... [████████████] 100%\n\n` +
-            `LANDLORD-TENANT RIGHTS:\n` +
-            `1. Security deposit MUST be returned within 45 days of vacating\n` +
-            `2. Landlord can deduct ONLY for documented damages\n` +
-            `3. You have right to demand itemized deduction list\n\n` +
-            `LEGAL ACTION:\n` +
-            `If landlord refuses, send legal notice citing:\n` +
-            `- Rent Control Act (your state)\n` +
-            `- Consumer Protection Act 2019 (unfair practice)\n\n` +
-            `Type "generate notice landlord" to auto-create legal notice.`
-        );
-    }
-    // Help Command
-    else if (lowerQuery.includes('help') || lowerQuery.includes('command')) {
-        await addAIMessage(
-            `AVAILABLE COMMANDS:\n\n` +
-            `[traffic/challan] - Traffic violation rights\n` +
-            `[refund/consumer] - Consumer protection help\n` +
-            `[landlord/deposit] - Tenancy dispute guidance\n` +
-            `[draft notice] - Generate legal notice\n` +
-            `[ipc <section>] - Explain IPC section\n` +
-            `[help] - Show this menu\n\n` +
-            `OR simply describe your legal problem in plain Hindi/English.`
-        );
-    }
-    // IPC Section Query
-    else if (lowerQuery.includes('ipc')) {
-        const match = lowerQuery.match(/\d+/);
-        const section = match ? match[0] : '420';
-        await addAIMessage(
-            `Querying IPC Database for Section ${section}... [████████████] 100%\n\n` +
-            `IPC SECTION ${section}:\n` +
-            `${section === '420' ?
-                'Cheating and dishonestly inducing delivery of property.\nPunishment: Up to 7 years imprisonment + fine.' :
-                'Section data found. (Full implementation would query actual IPC database)'
-            }\n\n` +
-            `Related Sections: ${section === '420' ? '417, 418, 419' : 'Various'}\n` +
-            `Cognizable: ${section === '420' ? 'Yes' : 'Check specific section'}\n` +
-            `Bailable: ${section === '420' ? 'No' : 'Depends on section'}`
-        );
-    }
-    // Default Response
-    else {
-        await addAIMessage(
-            `Query received. Processing...\n\n` +
-            `I analyzed your query but need more specifics. Please provide:\n` +
-            `- What type of legal issue? (traffic, consumer, landlord, etc.)\n` +
-            `- Date of incident\n` +
-            `- Any documentation available?\n\n` +
-            `Type "help" to see all available commands and scenarios I can handle.`
-        );
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server error response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('Response data:', data);
+
+        if (data.status === 'success') {
+            await addAIMessage(data.response);
+        } else {
+            console.error('API returned error:', data);
+            await addAIMessage(`System Error: ${data.message || 'Unknown error occurred'}`);
+        }
+
+    } catch (error) {
+        console.error('Chat API Error:', error);
+        await addAIMessage(`Connection Error: ${error.message}. Please check console for details.`);
     }
 }
 

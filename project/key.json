@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "hack4viksithackathon",
+  "private_key_id": "2cf5c400d2502dbacfaacd62ddbe3539b369b87b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC8bZd073aFmRFn\n1AOWULM63hUJlzPyRTxJFRXeUJNZH0ABoXs0mPQjLdsY5LEK38tjnIoLq0RU5UAg\nerJT/2kjLBRQdMyi+qMiMIvgJMHR0P9qhy5vnd6NL0OGT6gdDUiR8u+p8f83GPAt\nHVhCbLkt63rOT9h2OQ0HYS4CaW7ccTgR6Cq2Sgnw1vVhAc1LqzPC0tNhkq5weqnO\n1L/qZt3z4cbXZcRXAyCVsLX8H69ScdZ879VsjfNE4DzBgvy1lmMWFyHr+1hZDfpc\nkOmOHsP6ZRuWnlL6xyKHtzcuV5Avw9ALcOh3kJ1uRlwf2LU8nR4mgo0wG7JLGn43\nZv7bH5uJAgMBAAECggEAHL1qeH99yGrMaNXBpk+wxq3Q76GMXsuIom0A5OPNVa6a\niKUksaUSt7rqzCU1i78OuqbJt3Xr+jbtTQbp5D30v1Sd1Je8Dq/D6hcVfp6coXAL\nRShRQN0HcOlglz/XGHdKNlijjXxHvROkrnznVVpX9FUSah1rmryg7Bs6dUu3iQ/I\nhB1z0pAiqPTg7/YeDItE+n8F8lahuMC1/393Rl1swdIqmIFjLuJsznGHPH5CWeL0\nSravBAHrUsqCI/Jjqd4UQiZFSW+X6SoxBTBd811nmI0qzqbbbqQApIlchUMn2Vev\nzyYqF/OGv2QiOefH/fsu8mp6r8R+PY+dTeiVDLqI8QKBgQDwVzYE4R+KRLzn1iyw\nY+oRzW5Spnet9uLMDGfH53q6E3GWReChV3jSqdXVJ5QVm14JBphb3OXawZI9AElI\n0tBC5UhvQrsppS5Et3yu5SSpmGbnnqrfZ17pfBiVcg99zrT/+eKNBDeb29y2PtKT\nczd7G5QwUzTtBSuJ8xpLoSmxvwKBgQDItH+/mJ/dYLePAZX1MUX1qKoMhycw18bQ\n8vH39us9m9SSOoxQyEiLkYtxhw/HZmxBfDUCqSP2yqi85oAW8I8PfKbCpkHjskiN\nmzWLY/LBARB0NCTGT0xgkuSSZ5I16dQVp+OOaXjL0XFKJGDy0te7fDG9nLEkfZ0i\nBNcf4fl0twKBgE+Z8vBGx7V58r8udnqtfPcMfT+ulvDtVkySx0S0bDd4/SPyXOXT\nHNdZHNOOWkOVw91la8zxKsf7WL4PfDY8bHHbktQW2/p9FQf5ZbhfeHcbXOnV6W44\nxHy8dz/4GR1n+xbU4q4l+W0LstxBjmj7viJuDfS7ekoObk8wT0NBS5ftAoGAUxZ+\nSFgr3l7avsYeSXpThwaDF1qgO9UoRno897Vt33xyfPLmAc9YUQc43g/W1WquaFG+\nNFLHQ7TUNBeMcXK3Fuc4th5T6qp05MKbYRBIf+Qr5p9rlflgGh7Vp1JfMhiSJ0Dw\nsJUzX9Vd/B6hUAU/MCuS//ctUnj6Iwoz8MwBFHMCgYEAgYR/06/FF+Y+nKbdtZpf\nDUYInkwfDqoCYAMk2NAEza7YblAanmY8jqIhY3pdPhjlZSacxPq1iRKC+ILz8Gtd\n6jeJXKb7EYUih+nquDCxfD1395Up7U16/aLo7AQKo9STOlyzfPgaN4EplZefObSG\nF8mIqHbMcuzJLOfxuZcPuN4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "nyaya-sahayak-backend@hack4viksithackathon.iam.gserviceaccount.com",
+  "client_id": "108364731123651203379",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nyaya-sahayak-backend%40hack4viksithackathon.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
