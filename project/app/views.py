@@ -1,5 +1,4 @@
 from django.shortcuts import render
-<<<<<<< HEAD
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
@@ -7,13 +6,10 @@ import os
 import json
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
-=======
->>>>>>> b402a80a0b90519a154863283c3e66c428652071
 
 # Create your views here.
 def home(request):
     return render(request, 'index.html')
-<<<<<<< HEAD
 
 @csrf_exempt
 def analyze_document(request):
@@ -125,5 +121,3 @@ def chat_query(request):
              return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-=======
->>>>>>> b402a80a0b90519a154863283c3e66c428652071
