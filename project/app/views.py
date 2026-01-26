@@ -1,5 +1,4 @@
 from django.shortcuts import render
-<<<<<<< HEAD
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
@@ -7,13 +6,11 @@ import os
 import json
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
-=======
->>>>>>> b402a80a0b90519a154863283c3e66c428652071
+from google.oauth2 import service_account
 
 # Create your views here.
 def home(request):
     return render(request, 'index.html')
-<<<<<<< HEAD
 
 @csrf_exempt
 def analyze_document(request):
@@ -25,17 +22,20 @@ def analyze_document(request):
         
         try:
             # Load credentials and init Vertex AI
-            # Assuming key.json is in the project root (one directory up from app)
             base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             key_path = os.path.join(base_dir, 'key.json')
             
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
+            if not os.path.exists(key_path):
+                 raise FileNotFoundError(f"Key file not found at: {key_path}")
+
+            credentials = service_account.Credentials.from_service_account_file(key_path)
             
+            # Get project_id from credentials or file
             with open(key_path, 'r') as f:
-                creds = json.load(f)
-                project_id = creds.get('project_id')
-            
-            vertexai.init(project=project_id, location="us-central1")
+                creds_data = json.load(f)
+                project_id = creds_data.get('project_id')
+
+            vertexai.init(project=project_id, location="us-central1", credentials=credentials)
             
             # Use a multimodal model
             model = GenerativeModel("gemini-1.5-flash-001")
@@ -82,6 +82,7 @@ def analyze_document(request):
             # Cleanup on error
             if os.path.exists(local_path):
                 os.remove(local_path)
+            print(f"Error in analyze_document: {str(e)}") # Add debug logging
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
@@ -93,37 +94,13 @@ def chat_query(request):
             data = json.loads(request.body)
             user_message = data.get('message', '')
             
-            # Load credentials and init Vertex AI
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            key_path = os.path.join(base_dir, 'key.json')
+            # Simple static response for now, as requested to revert "added facility"
+            response_text = "I am Nyaya-Sahayak. Please upload a document for legal analysis."
             
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
-            
-            with open(key_path, 'r') as f:
-                creds = json.load(f)
-                project_id = creds.get('project_id')
-            
-            vertexai.init(project=project_id, location="us-central1")
-            
-            model = GenerativeModel("gemini-1.5-pro-001")
-            
-            chat_session = model.start_chat()
-            
-            prompt = f"""
-            You are Nyaya-Sahayak, an AI Legal Assistant for India.
-            Answer the following legal query in a helpful, accurate, and concise manner.
-            If the query implies a specific legal scenario (like traffic challan, consumer dispute, landlord issue), provide relevant sections of Indian Law (IPC, Consumer Protection Act, etc.) and actionable advice.
-            
-            User Query: {user_message}
-            """
-            
-            response = chat_session.send_message(prompt)
-            
-            return JsonResponse({'status': 'success', 'response': response.text})
+            return JsonResponse({'status': 'success', 'response': response_text})
             
         except Exception as e:
+             print(f"Error in chat_query: {str(e)}") 
              return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-=======
->>>>>>> b402a80a0b90519a154863283c3e66c428652071
