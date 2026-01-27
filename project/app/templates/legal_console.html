@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Console - Nyaya-Sahayak</title>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Monospace Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=Courier+Prime:wght@400;700&family=Fira+Code:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Legal Console Stylesheet -->
+    <link rel="stylesheet" href="/static/legal_console.css">
+</head>
+
+<body>
+    <!-- ============================================
+         HYPER-MODERN SPLIT-PANE DOCKET INTERFACE
+    ============================================ -->
+
+    <!-- Terminal Scanline Effect Overlay -->
+    <div class="scanline-overlay"></div>
+
+    <!-- Main Container -->
+    <div class="legal-console-container">
+
+        <!-- TOP BAR: Mainframe-style Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span class="status-badge pulse">
+                    <i class="fas fa-circle"></i> SYSTEM ONLINE
+                </span>
+                <span class="status-item">
+                    <i class="fas fa-database"></i> RAG: CONNECTED
+                </span>
+                <span class="status-item">
+                    <i class="fas fa-gavel"></i> NYAYA-SAHAYAK LEGAL CONSOLE v2.0
+                </span>
+            </div>
+            <div class="status-right">
+                <span class="status-time" id="system-time"></span>
+                <button class="btn-minimize" onclick="window.close()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SPLIT-PANE LAYOUT -->
+        <div class="split-pane-container">
+
+            <!-- ==================== LEFT PANE: PDF VIEWER ==================== -->
+            <div class="pane-left" id="pdf-pane">
+                <div class="pane-header">
+                    <i class="fas fa-file-pdf"></i> DOCUMENT DOCKET
+                </div>
+
+                <div class="pdf-viewer-container">
+                    <!-- Upload Zone (shown when no document) -->
+                    <div class="upload-zone" id="upload-zone">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h3>UPLOAD CONTRACT</h3>
+                        <p>Drop PDF/DOCX here for cross-verification</p>
+                        <button class="btn-upload" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-folder-open"></i> SELECT FILE
+                        </button>
+                        <input type="file" id="file-input" accept=".pdf,.docx" style="display:none;">
+                    </div>
+
+                    <!-- PDF Display Canvas (shown after upload) -->
+                    <div class="pdf-display hidden" id="pdf-display">
+                        <div class="pdf-controls">
+                            <button class="pdf-btn" id="pdf-prev">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span class="pdf-page-info">
+                                Page <span id="pdf-page-num">1</span> / <span id="pdf-page-count">1</span>
+                            </span>
+                            <button class="pdf-btn" id="pdf-next">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <button class="pdf-btn" id="pdf-zoom-in">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="pdf-btn" id="pdf-zoom-out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                        </div>
+                        <canvas id="pdf-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== RIGHT PANE: AI ANALYSIS STREAM ==================== -->
+            <div class="pane-right" id="analysis-pane">
+                <div class="pane-header">
+                    <i class="fas fa-brain"></i> AI LEGAL ANALYSIS STREAM
+                </div>
+
+                <div class="analysis-container" id="analysis-output">
+                    <!-- Welcome Message -->
+                    <div class="terminal-block">
+                        <div class="terminal-prefix">[SYSTEM INITIALIZATION]</div>
+                        <div class="terminal-text amber">
+                            ═══════════════════════════════════════════════════════════<br>
+                            NYAYA-SAHAYAK LEGAL CONSOLE v2.0<br>
+                            Network Yielding AI for Justice & Awareness Sahayak<br>
+                            ═══════════════════════════════════════════════════════════<br><br>
+
+                            <span class="pulse-text">● SYSTEMS ONLINE</span><br><br>
+
+                            <strong>MODES AVAILABLE:</strong><br>
+                            • RAG CHAT: Query legal database (type below)<br>
+                            • CONTRACT VERIFICATION: Upload document (left pane)<br>
+                            • CROSS-REFERENCE: Analyze against Bare Acts<br><br>
+
+                            <span class="dim-text">Type your legal query or upload a contract to begin...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TERMINAL INPUT (Bottom of Right Pane) -->
+                <div class="terminal-input-zone">
+                    <div class="terminal-prompt">
+                        <span class="prompt-symbol">▸</span>
+                        <input type="text" id="legal-query-input" class="terminal-input"
+                            placeholder="Enter legal query... (Press ENTER)" autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM ACTION BAR -->
+        <div class="action-bar">
+            <button class="action-btn" id="verify-contract-btn" disabled>
+                <i class="fas fa-check-double"></i> VERIFY CONTRACT
+            </button>
+            <button class="action-btn" id="clear-analysis-btn">
+                <i class="fas fa-eraser"></i> CLEAR ANALYSIS
+            </button>
+            <button class="action-btn amber-btn" id="new-query-btn">
+                <i class="fas fa-plus"></i> NEW QUERY
+            </button>
+        </div>
+    </div>
+
+    <!-- Legal Console JavaScript -->
+    <script src="/static/legal_console.js"></script>
+</body>
+
+</html>

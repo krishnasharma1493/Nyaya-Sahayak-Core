@@ -249,7 +249,8 @@ elements.aiCoreBtn.addEventListener('click', () => {
 // FILE UPLOAD HANDLERS
 // ========================================
 
-elements.uploadZone.addEventListener('click', () => {
+elements.uploadZone.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent default button/form behavior
     elements.fileInput.click();
 });
 
@@ -318,7 +319,7 @@ async function processDocument() {
     formData.append('file', State.caseData.file);
 
     try {
-        const response = await fetch('/api/analyze/', {
+        const response = await fetch('http://127.0.0.1:8000/api/analyze/', {
             method: 'POST',
             body: formData
         });
@@ -526,14 +527,16 @@ const TerminalState = {
     isTyping: false
 };
 
-// Open Terminal
+// Open Terminal / Legal Console - ISOLATED INTERFACE (New Tab)
 elements.openTerminalBtn.addEventListener('click', () => {
-    elements.holographicTerminal.classList.remove('hidden');
-    elements.terminalInput.focus();
     playTone(1400, 'sine', 0.15);
+
+    // Open legal console in NEW TAB - ABSOLUTE URL for cross-server navigation
+    // Frontend: http://127.0.0.1:5500 → Backend: http://127.0.0.1:8000
+    window.open('http://127.0.0.1:8000/legal-console/', '_blank');
 });
 
-// Close Terminal
+// Close Terminal (legacy - keep for compatibility)
 elements.closeTerminalBtn.addEventListener('click', () => {
     elements.holographicTerminal.classList.add('hidden');
     playTone(1000, 'sine', 0.1);
@@ -627,9 +630,9 @@ function escapeHtml(text) {
 
 async function processQuery(query) {
     try {
-        console.log('Sending request to /api/chat/ with message:', query);
+        console.log('Sending request to http://127.0.0.1:8000/api/chat/ with message:', query);
 
-        const response = await fetch('/api/chat/', {
+        const response = await fetch('http://127.0.0.1:8000/api/chat/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

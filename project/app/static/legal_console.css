@@ -1,0 +1,597 @@
+/**
+ * NYAYA-SAHAYAK LEGAL CONSOLE - GEMINI-CLASS FULL-SCREEN WORKSPACE
+ * Neon Amber on Jet Black - Professional Desktop Interface
+ */
+
+/* ============================================
+   GLOBAL RESET & FULL VIEWPORT ENFORCEMENT
+============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Palette: Neon Amber on Black */
+    --black-bg: #000000;
+    --dark-gray: #1a1a1a;
+    --neon-amber: #FFA500;
+    --neon-gold: #FFD700;
+    --amber-glow: rgba(255, 165, 0, 0.8);
+    --dim-amber: #CC8400;
+    --error-red: #FF3333;
+    --success-green: #00FF00;
+
+    /* Typography */
+    --font-mono: 'IBM Plex Mono', 'Courier Prime', 'Courier New', monospace;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* NO BODY SCROLL */
+    font-family: var(--font-mono);
+    background: var(--black-bg);
+    color: var(--neon-amber);
+}
+
+/* ============================================
+   SCANLINE EFFECT (CRT Monitor Aesthetic)
+============================================ */
+
+.scanline-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    background: repeating-linear-gradient(0deg,
+            rgba(255, 165, 0, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(255, 165, 0, 0.03) 3px);
+    animation: scanline-flicker 0.15s infinite;
+}
+
+@keyframes scanline-flicker {
+
+    0%,
+    100% {
+        opacity: 0.9;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   FULL-SCREEN CONTAINER (100VW x 100VH)
+============================================ */
+
+.legal-console-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--black-bg);
+    overflow: hidden;
+    /* Container doesn't scroll */
+}
+
+/* ============================================
+   TOP STATUS BAR
+============================================ */
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--dark-gray);
+    border-bottom: 2px solid var(--neon-amber);
+    box-shadow: 0 2px 20px var(--amber-glow);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    flex-shrink: 0;
+    /* Don't shrink */
+}
+
+.status-left,
+.status-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.status-badge {
+    color: var(--success-green);
+    text-shadow: 0 0 10px var(--success-green);
+}
+
+.status-badge.pulse {
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.status-item {
+    color: var(--dim-amber);
+}
+
+.status-time {
+    color: var(--neon-gold);
+    font-weight: 700;
+}
+
+.btn-minimize {
+    background: transparent;
+    border: 1px solid var(--error-red);
+    color: var(--error-red);
+    padding: 5px 12px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    transition: all 0.3s;
+}
+
+.btn-minimize:hover {
+    background: var(--error-red);
+    color: var(--black-bg);
+    box-shadow: 0 0 15px var(--error-red);
+}
+
+/* ============================================
+   SPLIT-PANE LAYOUT (45% LEFT / 55% RIGHT)
+============================================ */
+
+.split-pane-container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    /* Takes remaining space after status bar and action bar */
+    overflow: hidden;
+}
+
+/* ==================== LEFT PANE: DOCUMENT VIEWER (45%) ==================== */
+
+.pane-left {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--black-bg);
+    border-right: 1px solid #333;
+    overflow: hidden;
+    /* Pane itself doesn't scroll */
+}
+
+.pane-header {
+    padding: 15px 20px;
+    background: var(--dark-gray);
+    border-bottom: 2px solid var(--neon-amber);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--amber-glow);
+    flex-shrink: 0;
+}
+
+.pdf-viewer-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow-y: auto;
+    /* INDEPENDENT SCROLLING */
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar for PDF Viewer */
+.pdf-viewer-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.pdf-viewer-container::-webkit-scrollbar-track {
+    background: var(--dark-gray);
+}
+
+.pdf-viewer-container::-webkit-scrollbar-thumb {
+    background: var(--neon-amber);
+    box-shadow: 0 0 10px var(--amber-glow);
+}
+
+/* Upload Zone */
+.upload-zone {
+    text-align: center;
+    padding: 60px 40px;
+    border: 3px dashed var(--dim-amber);
+    margin: 40px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.upload-zone:hover {
+    border-color: var(--neon-amber);
+    background: rgba(255, 165, 0, 0.05);
+    box-shadow: 0 0 30px var(--amber-glow);
+}
+
+.upload-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.upload-zone h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--neon-gold);
+    text-shadow: 0 0 15px var(--amber-glow);
+}
+
+.upload-zone p {
+    font-size: 12px;
+    color: var(--dim-amber);
+    margin-bottom: 25px;
+}
+
+.btn-upload {
+    background: transparent;
+    border: 2px solid var(--neon-amber);
+    color: var(--neon-amber);
+    padding: 12px 30px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1.5px;
+}
+
+.btn-upload:hover {
+    background: var(--neon-amber);
+    color: var(--black-bg);
+    box-shadow: 0 0 25px var(--amber-glow);
+    transform: scale(1.05);
+}
+
+/* PDF Display */
+.pdf-display {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.pdf-display.hidden {
+    display: none;
+}
+
+.pdf-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--dark-gray);
+    border-bottom: 1px solid var(--neon-amber);
+    flex-shrink: 0;
+}
+
+.pdf-btn {
+    background: transparent;
+    border: 1px solid var(--neon-amber);
+    color: var(--neon-amber);
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+.pdf-btn:hover:not(:disabled) {
+    background: var(--neon-amber);
+    color: var(--black-bg);
+    box-shadow: 0 0 15px var(--amber-glow);
+}
+
+.pdf-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pdf-page-info {
+    color: var(--neon-gold);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+#pdf-canvas {
+    margin: 20px auto;
+    max-width: 100%;
+    border: 1px solid var(--dim-amber);
+    box-shadow: 0 0 30px rgba(255, 165, 0, 0.3);
+}
+
+/* ==================== RIGHT PANE: CHAT INTERFACE (55%) ==================== */
+
+.pane-right {
+    width: 55%;
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--black-bg);
+    overflow: hidden;
+    /* Pane itself doesn't scroll */
+}
+
+/* CHAT HISTORY AREA - Flex-grow with internal scroll */
+.analysis-container {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+    /* INDEPENDENT SCROLLING */
+    overflow-x: hidden;
+    padding: 30px 20px;
+    background: var(--black-bg);
+}
+
+/* Center content width within full-width background */
+.analysis-container>* {
+    max-width: 48rem;
+    /* 3xl equivalent */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Custom Scrollbar for Chat */
+.analysis-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.analysis-container::-webkit-scrollbar-track {
+    background: var(--dark-gray);
+}
+
+.analysis-container::-webkit-scrollbar-thumb {
+    background: var(--neon-amber);
+    box-shadow: 0 0 10px var(--amber-glow);
+}
+
+/* Terminal Blocks */
+.terminal-block {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid var(--dim-amber);
+    background: rgba(255, 165, 0, 0.03);
+}
+
+.terminal-prefix {
+    color: var(--neon-gold);
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px var(--amber-glow);
+    letter-spacing: 1px;
+}
+
+.terminal-text {
+    color: var(--neon-amber);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.terminal-text.amber {
+    color: var(--neon-amber);
+    text-shadow: 0 0 5px var(--amber-glow);
+}
+
+.terminal-text.dim {
+    color: var(--dim-amber);
+}
+
+.terminal-text strong {
+    color: var(--neon-gold);
+    font-weight: 700;
+}
+
+.pulse-text {
+    animation: pulse-glow 2s infinite;
+}
+
+.dim-text {
+    color: var(--dim-amber);
+    opacity: 0.7;
+}
+
+/* Typing Animation */
+.typing-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 16px;
+    background: var(--neon-amber);
+    animation: blink 1s infinite;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   INPUT AREA - FIXED AT BOTTOM (Gemini-style)
+============================================ */
+
+.terminal-input-zone {
+    width: 100%;
+    padding: 24px;
+    /* Large breathing room */
+    background: var(--dark-gray);
+    border-top: 2px solid var(--neon-amber);
+    box-shadow: 0 -2px 20px var(--amber-glow);
+    flex-shrink: 0;
+    /* Fixed size */
+}
+
+.terminal-prompt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 48rem;
+    /* 3xl - centered like Gemini */
+    margin: 0 auto;
+    /* Center the input bar */
+}
+
+.prompt-symbol {
+    color: var(--neon-gold);
+    font-size: 18px;
+    font-weight: 700;
+    text-shadow: 0 0 15px var(--amber-glow);
+    flex-shrink: 0;
+}
+
+.terminal-input {
+    flex: 1;
+    background: rgba(255, 165, 0, 0.05);
+    border: 2px solid var(--dim-amber);
+    border-radius: 24px;
+    /* Rounded corners like Gemini */
+    outline: none;
+    color: var(--neon-amber);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 14px 20px;
+    transition: all 0.3s;
+}
+
+.terminal-input:focus {
+    border-color: var(--neon-gold);
+    box-shadow: 0 0 20px var(--amber-glow);
+    background: rgba(255, 165, 0, 0.08);
+}
+
+.terminal-input::placeholder {
+    color: var(--dim-amber);
+    opacity: 0.5;
+}
+
+/* ============================================
+   ACTION BAR (BOTTOM)
+============================================ */
+
+.action-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background: var(--dark-gray);
+    border-top: 2px solid var(--neon-amber);
+    flex-shrink: 0;
+}
+
+.action-btn {
+    background: transparent;
+    border: 2px solid var(--neon-amber);
+    color: var(--neon-amber);
+    padding: 12px 30px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1.5px;
+}
+
+.action-btn:hover:not(:disabled) {
+    background: var(--neon-amber);
+    color: var(--black-bg);
+    box-shadow: 0 0 25px var(--amber-glow);
+    transform: translateY(-2px);
+}
+
+.action-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.action-btn.amber-btn {
+    border-color: var(--neon-gold);
+    color: var(--neon-gold);
+}
+
+.action-btn.amber-btn:hover {
+    background: var(--neon-gold);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+============================================ */
+
+@media (max-width: 1024px) {
+    .split-pane-container {
+        flex-direction: column;
+    }
+
+    .pane-left,
+    .pane-right {
+        width: 100%;
+    }
+
+    .pane-left {
+        height: 40%;
+        border-right: none;
+        border-bottom: 2px solid var(--neon-amber);
+    }
+
+    .pane-right {
+        height: 60%;
+    }
+}

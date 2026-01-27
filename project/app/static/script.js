@@ -434,14 +434,16 @@ const TerminalState = {
     isTyping: false
 };
 
-// Open Terminal
+// Legal AI Chat button - open in NEW TAB (Isolated Interface Architecture)
 elements.openTerminalBtn.addEventListener('click', () => {
-    elements.holographicTerminal.classList.remove('hidden');
-    elements.terminalInput.focus();
     playTone(1400, 'sine', 0.15);
+
+    // Open legal console in NEW TAB - ABSOLUTE URL for cross-server navigation
+    // Frontend: http://127.0.0.1:5500 → Backend: http://127.0.0.1:8000
+    window.open('http://127.0.0.1:8000/legal-console/', '_blank');
 });
 
-// Close Terminal
+// Close Terminal (legacy - keep for compatibility)
 elements.closeTerminalBtn.addEventListener('click', () => {
     elements.holographicTerminal.classList.add('hidden');
     playTone(1000, 'sine', 0.1);
