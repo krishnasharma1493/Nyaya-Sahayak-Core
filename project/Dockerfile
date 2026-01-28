@@ -24,8 +24,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
+# Collect static files for production
+RUN python manage.py collectstatic --noinput
+
 # Create necessary directories
-RUN mkdir -p media temp_uploads staticfiles
+RUN mkdir -p media temp_uploads
 
 # Expose port (Cloud Run will set PORT env variable)
 EXPOSE 8080
