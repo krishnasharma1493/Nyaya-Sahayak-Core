@@ -1,0 +1,128 @@
+/* LEGAL THINKING INDICATOR STYLES */
+/* Cyberpunk/Neon aesthetic for loading states */
+
+.legal-thinking-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #FFBF00;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 191, 0, 0.3);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+
+    0%,
+    100% {
+        border-color: #FFBF00;
+        box-shadow: 0 0 20px rgba(255, 191, 0, 0.3);
+    }
+
+    50% {
+        border-color: #FFD700;
+        box-shadow: 0 0 30px rgba(255, 191, 0, 0.5);
+    }
+}
+
+.thinking-icon-container {
+    flex-shrink: 0;
+}
+
+.thinking-icon {
+    width: 32px;
+    height: 32px;
+    color: #FFBF00;
+    animation: pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.thinking-text-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.thinking-emoji {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: opacity 0.3s ease;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.thinking-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    color: #FFBF00;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: opacity 0.3s ease;
+    text-shadow: 0 0 10px rgba(255, 191, 0, 0.5);
+}
+
+/* Typewriter effect (optional enhancement) */
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.thinking-text.typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typewriter 1.5s steps(40) forwards;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+    .legal-thinking-indicator {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .thinking-text {
+        font-size: 0.85rem;
+    }
+
+    .thinking-icon {
+        width: 28px;
+        height: 28px;
+    }
+}

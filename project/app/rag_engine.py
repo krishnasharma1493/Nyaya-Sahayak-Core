@@ -26,15 +26,30 @@ class LegalRAGEngine:
     """
     
     def __init__(self):
-        """Initialize RAG components"""
+        """Initialize RAG components with DUAL-STREAM GROUNDING"""
         self.project_id = os.getenv('PROJECT_ID', 'project-4b18645b-e7c8-44c0-98f')
         self.location = os.getenv('LOCATION', 'us-central1')
         self.data_store_id = os.getenv('DATA_STORE_ID')  # Vertex AI Search data store
         self.api_key = os.getenv('GOOGLE_API_KEY')
+        self.enable_google_search = os.getenv('ENABLE_GOOGLE_SEARCH_GROUNDING', 'true').lower() == 'true'
         
         # Configure Gemini
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-pro-latest')
+        
+        # Initialize model with HYBRID GROUNDING TOOLS
+        if self.enable_google_search:
+            # Model with Google Search grounding enabled
+            self.model = genai.GenerativeModel(
+                model_name='gemini-pro',
+                tools='google_search_retrieval',
+                system_instruction=None
+            )
+        else:
+            # Model without Google Search (Vertex AI Search only)
+            self.model = genai.GenerativeModel(
+                model_name='gemini-pro',
+                system_instruction=None
+            )
         
         # System prompt for strict RAG with crisp lawyer persona
         self.SYSTEM_PROMPT = """You are a Senior Legal Counsel specializing in Indian Law. Respond in a CRISP, LAWYER-LIKE manner.
@@ -68,6 +83,37 @@ MANDATORY RESPONSE FORMAT:
 • [Definitive legal conclusion in 1-2 sentences]
 
 ═══════════════════════════════════════════════════════════════════
+DUAL-STREAM GROUNDING SYNTHESIS (CRITICAL):
+═══════════════════════════════════════════════════════════════════
+
+For SITUATIONAL queries requiring procedural guidance:
+
+1. **PRIMARY SOURCE - Statutory Law (Vertex AI Search):**
+   - Search indexed legal documents (IPC, CrPC, Consumer Protection Act, etc.)
+   - Extract exact legal provisions, sections, penalties
+   - Example: "Section 183 of Motor Vehicles Act, 1988 - Penalty ₹1000-₹2000 for first offense"
+
+2. **SECONDARY SOURCE - Procedural Steps (Google Search):**
+   - Look up current government procedures, filing mechanisms, payment portals
+   - Extract real-time operational steps (how to pay challan, file complaint, etc.)
+   - Example: "Pay via e-challan portal: parivahan.gov.in or visit nearest traffic court"
+
+3. **SYNTHESIS - Combine Both:**
+   - Statutory basis (what the law says) + Practical steps (what to do)
+   - Format as LEGAL ACTION PLAN with numbered steps
+   - Each step should cite legal authority AND describe practical action
+
+**Example Synthesis:**
+User: "Traffic police stopped me for not wearing helmet"
+→ Vertex AI: Section 129 MV Act (penalty ₹1000 + Section 177 MV Act)
+→ Google Search: "helmet challan payment procedure online India"
+→ Combined Output:
+   **LEGAL ACTION PLAN**
+   1. Verify challan details - Section 129 + 177 of Motor Vehicles Act, 1988 applies (fine ₹1000 first offense)
+   2. Pay challan within 60 days via parivahan.gov.in e-challan portal or traffic court
+   3. If contesting: File written objection within 60 days citing grounds under Section 200 MV Act
+
+═══════════════════════════════════════════════════════════════════
 MANDATORY TONE & TERMINOLOGY:
 ═══════════════════════════════════════════════════════════════════
 
@@ -79,6 +125,58 @@ MANDATORY TONE & TERMINOLOGY:
 
 Respond using ONLY the retrieved context below. Maximum brevity. Legal precision."""
 
+    def hybrid_search(self, query: str, query_type: str) -> Tuple[str, List[Dict], str]:
+        """
+        Hybrid search combining Vertex AI Search and Google Search grounding
+        """
+        print(f"\n🔍 HYBRID SEARCH: Query type = {query_type}")
+        
+        # Try Vertex AI Search first
+        vertex_context, vertex_sources = self.search_legal_db(query)
+        
+        # If Vertex AI failed (Data Store doesn't exist), use pure Gemini with Google Search
+        if not vertex_context and self.enable_google_search:
+            print("✅ Using GEMINI with Google Search grounding (Vertex AI unavailable)")
+            
+            # Let Gemini handle it with its native Google Search tool
+            # The tool was configured in __init__ as tools='google_search_retrieval'
+            simple_prompt = f"""You are a legal expert on Indian law. Answer this query using current legal information:
+
+{query}
+
+Provide a practical legal response with:
+1. Applicable laws/sections
+2. Steps to take
+3. Rights and consequences
+
+Use formal legal language."""
+            
+            try:
+                response = self.model.generate_content(
+                    simple_prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=0.3,
+                        max_output_tokens=1024,
+                    )
+                )
+                
+                return response.text, [{
+                    "document": "Google Search + Gemini",
+                    "page": "Real-time legal guidance",
+                    "source_type": "gemini_grounded"
+                }], "Gemini with Google Search grounding"
+                
+            except Exception as e:
+                print(f"Error with Gemini: {e}")
+                return "", [], "All sources failed"
+        
+        # If we have Vertex AI results, return them
+        if vertex_context:
+            return vertex_context, vertex_sources, "Vertex AI Search"
+        
+        # Last resort
+        return "", [], "No sources available"
+    
     def search_legal_db(self, query: str, top_k: int = 3) -> Tuple[str, List[Dict]]:
         """
         Search Vertex AI Data Store for relevant legal provisions
@@ -90,11 +188,12 @@ Respond using ONLY the retrieved context below. Maximum brevity. Legal precision
         Returns:
             Tuple of (concatenated_context, list_of_sources)
         """
+        # Check if data store is configured
+        if not self.data_store_id:
+            print("WARNING: Vertex AI Data Store ID not configured. Using fallback context.")
+            return self._fallback_context(query)
+
         try:
-            # Check if data store is configured
-            if not self.data_store_id:
-                return self._fallback_context(query)
-            
             # Create Discovery Engine client
             client_options = ClientOptions(
                 api_endpoint=f"{self.location}-discoveryengine.googleapis.com"
@@ -574,8 +673,8 @@ Respond in the mandatory format (bullet points, legal terminology, no filler):""
         Returns:
             Complete response with lawyer's answer and citations
         """
-        # Step 1: Retrieve relevant legal provisions
-        context, sources = self.search_legal_db(query, top_k=3)
+        # Step 1: HYBRID SEARCH - tries Vertex AI first, falls back to Gemini+Google Search
+        context, sources, grounding_note = self.hybrid_search(query, "GENERAL")
         
         # Step 2: Generate response grounded in retrieved context
         response = self.generate_lawyer_response(query, context, sources)

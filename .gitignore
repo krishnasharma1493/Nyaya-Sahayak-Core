@@ -210,3 +210,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Accidental directory cleanup
+project/exec -l /
+
+# Secrets
+project/nyaya-sahayak-credentials.json

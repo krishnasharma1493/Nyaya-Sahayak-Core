@@ -1,0 +1,345 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Tools Dashboard - Nyaya-Sahayak</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=Courier+Prime:wght@400;700&family=Fira+Code:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'legal_console.css' %}">
+    <link rel="stylesheet" href="{% static 'legal_thinking_indicator.css' %}">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #050a14;
+            border-right: 1px solid var(--dim-amber);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            z-index: 10;
+        }
+
+        .brand {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid var(--scanline-color);
+            margin-bottom: 20px;
+        }
+
+        .brand span {
+            color: var(--neon-gold);
+            font-family: 'IBM Plex Mono';
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(255, 191, 0, 0.3);
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 191, 0, 0.1);
+            color: var(--neon-gold);
+            border-left-color: var(--neon-gold);
+            box-shadow: 0 0 15px rgba(255, 191, 0, 0.1);
+        }
+
+        .menu-item:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            background: radial-gradient(circle at center, #0a0f1d 0%, #000000 100%);
+        }
+
+        .tool-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--dim-amber);
+            padding-bottom: 15px;
+        }
+
+        .tool-header h1 {
+            color: var(--neon-gold);
+            margin: 0;
+            font-family: 'IBM Plex Mono';
+            font-size: 1.8rem;
+        }
+
+        /* FORM CONTAINER - REUSED STYLES */
+        .legal-form-container {
+            background: rgba(5, 10, 20, 0.8);
+            border: 1px solid var(--dim-amber);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* BACK BUTTON */
+        .btn-back-console {
+            margin-top: auto;
+            margin-left: 20px;
+            margin-right: 20px;
+            padding: 10px;
+            border: 1px solid var(--dim-amber);
+            color: var(--dim-amber);
+            text-align: center;
+            text-decoration: none;
+            font-family: 'IBM Plex Mono';
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .btn-back-console:hover {
+            color: var(--neon-gold);
+            border-color: var(--neon-gold);
+        }
+
+        /* Inline styles from previous step for inputs */
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: var(--neon-gold);
+            font-family: 'IBM Plex Mono';
+            letter-spacing: 1px;
+        }
+
+        .notice-input,
+        .notice-textarea {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px;
+            font-family: 'Courier Prime';
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .notice-input:focus,
+        .notice-textarea:focus {
+            border-color: var(--neon-gold);
+            outline: none;
+        }
+
+        .notice-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .btn-generate-notice {
+            background: linear-gradient(135deg, #FFBF00 0%, #FFA500 100%);
+            border: none;
+            color: #000;
+            padding: 15px 30px;
+            font-weight: bold;
+            font-family: 'IBM Plex Mono';
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-generate-notice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255, 191, 0, 0.4);
+        }
+
+        /* Modal reused styles can be in CSS file or here */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #111;
+            border: 2px solid var(--neon-gold);
+            width: 80%;
+            max-width: 900px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--dim-amber);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #1a1a1a;
+        }
+
+        .legal-document-paper {
+            background: #fff;
+            color: #000;
+            padding: 50px;
+            font-family: 'Times New Roman';
+            line-height: 1.6;
+            min-height: 100%;
+            white-space: pre-wrap;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            background: #000;
+            border-top: 1px solid var(--dim-amber);
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-act {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--neon-gold);
+            color: var(--neon-gold);
+            cursor: pointer;
+            font-family: 'IBM Plex Mono';
+        }
+
+        .btn-act:hover {
+            background: var(--neon-gold);
+            color: #000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="brand">
+            <i class="fas fa-gavel" style="color:var(--neon-gold)"></i>
+            <span>NYAYA-TOOLS</span>
+        </div>
+
+        <div class="menu-item active">
+            <i class="fas fa-file-contract"></i> Notice Drafter
+        </div>
+        <div class="menu-item" style="opacity:0.5; cursor:not-allowed">
+            <i class="fas fa-shield-alt"></i> Zero-FIR (Soon)
+        </div>
+        <div class="menu-item" style="opacity:0.5; cursor:not-allowed">
+            <i class="fas fa-user-tie"></i> Find Lawyer (Soon)
+        </div>
+
+        <a href="/" class="btn-back-console">
+            <i class="fas fa-chevron-left"></i> BACK TO CHAT
+        </a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="scanline-overlay"></div> <!-- Reusing global scanline if available or adding specific -->
+
+        <div class="tool-header">
+            <h1><i class="fas fa-magic"></i> AI LEGAL NOTICE GENERATOR</h1>
+            <p style="color:var(--dim-amber); margin-top:5px; font-family:'Fira Code'">Draft formal legal notices in
+                seconds using Gemini Pro.</p>
+        </div>
+
+        <div class="legal-form-container">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> SENDER NAME (YOU)</label>
+                <input type="text" id="sender-name" class="notice-input" placeholder="Enter your full legal name">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-user-slash"></i> RECEIVER NAME (OPPONENT)</label>
+                <input type="text" id="receiver-name" class="notice-input"
+                    placeholder="Enter name of person/company you are sending notice to">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-comment-dots"></i> COMPLAINT DETAILS</label>
+                <textarea id="complaint-text" class="notice-textarea"
+                    placeholder="Explain the incident in detail. Include dates, amounts, and what valid claim you have. Example: 'I served notice period but my employer isn't paying my last salary of 50k...'"></textarea>
+            </div>
+
+            <button id="btn-generate-notice" class="btn-generate-notice">
+                <i class="fas fa-bolt"></i> GENERATE NOTICE
+            </button>
+            <div id="analysis-output" style="margin-top:20px;"></div> <!-- Terminal Output for progress -->
+        </div>
+    </div>
+
+    <!-- PREVIEW MODAL -->
+    <div id="notice-preview-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color:var(--neon-gold); margin:0;">LEGAL NOTICE PREVIEW</h3>
+                <button onclick="closeNoticeModal()"
+                    style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="notice-content" class="legal-document-paper"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-act" onclick="downloadNoticePDF()"><i class="fas fa-download"></i> PDF</button>
+                <button class="btn-act" onclick="copyNoticeText()"><i class="fas fa-copy"></i> COPY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'legal_thinking_indicator.js' %}"></script>
+    <script src="{% static 'legal_tools.js' %}"></script>
+</body>
+
+</html>

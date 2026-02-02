@@ -24,7 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-8m3d906e%*2_0^_9t)-+26dmo)$%6%+4ri-q*!@(7p%zmhs(jh')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = True # os.getenv('DEBUG', 'True') == 'True'
+
+# Use Cookie-based sessions for Cloud Run (stateless)
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 # Cloud Run sets the PORT environment variable, use it for allowed hosts
 ALLOWED_HOSTS = [
@@ -138,8 +141,14 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # CORS Settings for Frontend Communication
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for debugging
-COORS_ALLOWED_ORIGINS = [] # Disabled in favor of CORS_ALLOW_ALL_ORIGINS
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "https://nyaya-sahayak-core.web.app",
+    "https://nyaya-sahayak-core.firebaseapp.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://nyaya-sahayak-core-953796636203.us-central1.run.app",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 

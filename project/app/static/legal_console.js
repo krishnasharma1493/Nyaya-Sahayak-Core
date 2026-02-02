@@ -22,7 +22,13 @@ const ConsoleState = {
 
 const elements = {
     uploadZone: document.getElementById('upload-zone'),
-    fileInput: document.getElementById('file-input'),
+    legalNoticeForm: document.getElementById('legal-notice-form'),
+    senderInput: document.getElementById('sender-name'),
+    receiverInput: document.getElementById('receiver-name'),
+    complaintInput: document.getElementById('complaint-text'),
+    generateNoticeBtn: document.getElementById('btn-generate-notice'),
+
+    fileInput: document.getElementById('file-input'), // Kept for backend compatibility/future
     pdfDisplay: document.getElementById('pdf-display'),
     pdfCanvas: document.getElementById('pdf-canvas'),
     pdfPageNum: document.getElementById('pdf-page-num'),
@@ -91,6 +97,82 @@ elements.uploadZone.addEventListener('drop', (e) => {
         handleFileUploadWithFile(file);
     }
 });
+
+// LEGAL NOTICE GENERATOR LOGIC
+if (elements.generateNoticeBtn) {
+    elements.generateNoticeBtn.addEventListener('click', async () => {
+        const sender = elements.senderInput.value.trim();
+        const receiver = elements.receiverInput.value.trim();
+        const complaint = elements.complaintInput.value.trim();
+
+        if (!sender || !receiver || !complaint) {
+            addAnalysisBlock('[ERROR]', 'Please fill in all fields (Sender, Receiver, Complaint).', 'dim');
+            return;
+        }
+
+        elements.generateNoticeBtn.disabled = true;
+        elements.generateNoticeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> DRAFTING...';
+
+        // Show indicator in terminal
+        addAnalysisBlock('[SYSTEM]', 'Received Complaint Details. Initiating Legal Drafting Sequence...', 'amber');
+        const thinking = new LegalThinkingIndicator('analysis-output');
+        thinking.start();
+
+        try {
+            const response = await fetch('/api/draft-notice/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender, receiver, complaint })
+            });
+
+            const result = await response.json();
+            thinking.stop();
+
+            if (result.success) {
+                addAnalysisBlock('[SUCCESS]', 'Legal Notice generated successfully! Opening Preview...', 'amber');
+                openNoticeModal(result.notice);
+            } else {
+                addAnalysisBlock('[ERROR]', result.error || 'Drafting failed', 'dim');
+            }
+
+        } catch (e) {
+            thinking.stop();
+            addAnalysisBlock('[ERROR]', `Network Error: ${e.message}`, 'dim');
+        }
+
+        elements.generateNoticeBtn.disabled = false;
+        elements.generateNoticeBtn.innerHTML = '<i class="fas fa-bolt"></i> GENERATE LEGAL NOTICE';
+    });
+}
+
+// Modal Functions
+window.openNoticeModal = function (markdownText) {
+    const modal = document.getElementById('notice-preview-modal');
+    const content = document.getElementById('notice-content');
+
+    // Simple markdown formatting for display
+    let html = markdownText
+        .replace(/^# (.*$)/gim, '<h1 style="text-align:center; text-transform:uppercase; border-bottom: 2px solid #000; padding-bottom:10px;">$1</h1>')
+        .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+        .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
+        .replace(/\n/gim, '<br>');
+
+    content.innerHTML = html;
+    modal.classList.remove('hidden');
+}
+
+window.closeNoticeModal = function () {
+    document.getElementById('notice-preview-modal').classList.add('hidden');
+}
+
+window.copyNoticeText = function () {
+    const text = document.getElementById('notice-content').innerText;
+    navigator.clipboard.writeText(text).then(() => alert('Notice copied to clipboard!'));
+}
+
+window.downloadNoticePDF = function () {
+    alert("PDF Download feature coming soon in Phase 3!");
+}
 
 async function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -266,31 +348,36 @@ async function streamTypingEffect(prefix, text, textClass = 'amber') {
     cursor.remove();
 }
 
-// ============================================
-// RAG CHAT FUNCTIONALITY
-// ============================================
+// ==================================
+// LEGAL QUERY SUBMISSION
+// ==================================
+
+// Initialize the thinking indicator
+const thinkingIndicator = new LegalThinkingIndicator('analysis-output');
 
 elements.legalQueryInput.addEventListener('keypress', async (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !ConsoleState.isProcessing) {
         const query = elements.legalQueryInput.value.trim();
 
-        if (query && !ConsoleState.isProcessing) {
+        if (!query) return;
+
+        const hasUploadedFile = ConsoleState.uploadedFile !== null;
+
+        if (query) {
             ConsoleState.isProcessing = true;
-            elements.legalQueryInput.value = '';
+            elements.legalQueryInput.disabled = true;
 
             // Show user query
             addAnalysisBlock('[USER QUERY]', query, 'amber');
 
-            // HYBRID MODE: Check if file is uploaded
-            const hasUploadedFile = ConsoleState.uploadedFile !== null;
-
+            // Show mode if document uploaded
             if (hasUploadedFile) {
                 console.log('HYBRID MODE: File selected:', ConsoleState.uploadedFile.name);
                 addAnalysisBlock('[MODE]', `🔍 ANALYZING UPLOADED DOCUMENT: ${ConsoleState.uploadedFile.name}`, 'amber');
             }
 
-            // Show processing indicator
-            addAnalysisBlock('[PROCESSING]', hasUploadedFile ? 'Reading uploaded document and querying legal database...' : 'Querying RAG database...', 'dim');
+            // START DYNAMIC THINKING INDICATOR (replaces static "PROCESSING" message)
+            thinkingIndicator.start();
 
             try {
                 let response;
@@ -301,7 +388,7 @@ elements.legalQueryInput.addEventListener('keypress', async (e) => {
 
                     const formData = new FormData();
                     formData.append('file', ConsoleState.uploadedFile);
-                    formData.append('message', query);
+                    formData.append('query', query);  // Changed from 'message' to 'query'
 
                     response = await fetch('/api/chat/', {
                         method: 'POST',
@@ -316,51 +403,42 @@ elements.legalQueryInput.addEventListener('keypress', async (e) => {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ message: query })
+                        body: JSON.stringify({ query: query })  // Changed from 'message' to 'query'
                     });
                 }
 
                 const data = await response.json();
 
-                if (data.status === 'success') {
-                    // Show mode indicator
-                    if (data.has_uploaded_context) {
-                        addAnalysisBlock('[SUCCESS]', '✅ Answered from uploaded document (Local Context Priority)', 'amber');
-                    }
+                // STOP THINKING INDICATOR
+                thinkingIndicator.stop();
 
+                if (data.success) {
                     // Stream the response with typing effect
                     await streamTypingEffect('[RAG RESPONSE]', data.response);
 
-                    // Show sources if available
-                    if (data.sources && data.sources.length > 0) {
-                        let sourcesText = '<strong>SOURCES:</strong><br>';
-                        data.sources.forEach(source => {
-                            sourcesText += `• ${source.filename || 'Unknown'} ${source.page ? `(Page ${source.page})` : ''}<br>`;
-                        });
-                        addAnalysisBlock('[CITATIONS]', sourcesText, 'dim');
-                    }
-
-                    // Show confidence
-                    if (data.confidence) {
-                        const confidenceEmoji = data.confidence === 'high' || data.confidence_score > 0.8 ? '🟢' : data.confidence === 'medium' ? '🟡' : '🔴';
-                        addAnalysisBlock('[CONFIDENCE]', `${confidenceEmoji} ${String(data.confidence).toUpperCase()}`, 'amber');
-                    }
-
-                    // Show note if provided
-                    if (data.note) {
-                        addAnalysisBlock('[NOTE]', data.note, 'dim');
+                    // Show metadata if available
+                    if (data.metadata) {
+                        addAnalysisBlock('[NOTE]', `Model: ${data.metadata.model} | Method: ${data.metadata.method}`, 'dim');
                     }
 
                 } else {
-                    addAnalysisBlock('[ERROR]', data.message || 'Query failed', 'dim');
+                    addAnalysisBlock('[ERROR]', data.error || data.message || 'Query failed', 'dim');
                 }
 
             } catch (error) {
                 console.error('Chat API error:', error);
+
+                // STOP THINKING INDICATOR ON ERROR
+                thinkingIndicator.stop();
+
                 addAnalysisBlock('[ERROR]', `Connection failed: ${error.message}`, 'dim');
             }
 
+            // Re-enable input and clear query
             ConsoleState.isProcessing = false;
+            elements.legalQueryInput.disabled = false;
+            elements.legalQueryInput.value = '';
+            elements.legalQueryInput.focus();
         }
     }
 });
@@ -378,69 +456,51 @@ elements.verifyContractBtn.addEventListener('click', async () => {
     ConsoleState.isProcessing = true;
     elements.verifyContractBtn.disabled = true;
 
-    addAnalysisBlock('[CONTRACT VERIFICATION]', 'Cross-verifying against legal database...', 'amber');
+    // Start thinking indicator
+    addAnalysisBlock('[SYSTEM]', 'Initiating Legal Audit Protocol...', 'amber');
+
+    // Create a specific loading block
+    const loadingBlock = document.createElement('div');
+    loadingBlock.className = 'terminal-block';
+    loadingBlock.innerHTML = `
+        <div class="terminal-prefix">[ANALYZING]</div>
+        <div class="terminal-text amber pulse-text">
+            Scanning contract for legal risks and missing clauses...
+        </div>
+    `;
+    elements.analysisOutput.appendChild(loadingBlock);
+    elements.analysisOutput.scrollTop = elements.analysisOutput.scrollHeight;
 
     try {
         const formData = new FormData();
         formData.append('file', ConsoleState.uploadedFile);
 
-        const response = await fetch('http://127.0.0.1:8000/api/verify-contract/', {
+        const response = await fetch('/api/verify-document/', {
             method: 'POST',
             body: formData
         });
 
         const result = await response.json();
 
-        if (result.status === 'success') {
-            const data = result.data;
+        // Remove loading block
+        loadingBlock.remove();
 
-            // Overall compliance
-            let complianceText = `<strong>OVERALL COMPLIANCE:</strong> ${data.overall_compliance}<br>`;
-            complianceText += `<strong>Contract Type:</strong> ${data.contract_type}<br>`;
-            complianceText += `<strong>Clauses Analyzed:</strong> ${data.total_clauses_analyzed}<br>`;
-            complianceText += `<strong>Issues Found:</strong> ${data.issues_found}<br>`;
-            complianceText += `<strong>Risks Identified:</strong> ${data.risks_identified}`;
+        if (result.success) {
+            // Format Markdown to HTML for terminal display
+            let formattedReport = result.analysis
+                .replace(/^# (.*$)/gim, '<h3>$1</h3>') // H1
+                .replace(/^## (.*$)/gim, '<br><strong style="color:#FFA500; font-size:1.1em">$1</strong>') // H2
+                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>') // Bold
+                .replace(/\n/gim, '<br>'); // Newlines
 
-            addAnalysisBlock('[COMPLIANCE REPORT]', complianceText, 'amber');
-
-            // Discrepancies
-            if (data.discrepancies.length > 0) {
-                let discText = '<strong>DISCREPANCIES DETECTED:</strong><br>';
-                data.discrepancies.forEach((disc, idx) => {
-                    discText += `<br>${idx + 1}. ${disc.clause}:<br>`;
-                    disc.issues.forEach(issue => {
-                        discText += `   • ${issue}<br>`;
-                    });
-                });
-                addAnalysisBlock('[DISCREPANCIES]', discText, 'amber');
-            }
-
-            // Risks
-            if (data.risks.length > 0) {
-                let riskText = '<strong>LEGAL RISKS IDENTIFIED:</strong><br>';
-                data.risks.forEach((risk, idx) => {
-                    riskText += `<br>${idx + 1}. [${risk.clause}]<br>   ${risk.risk}`;
-                });
-                addAnalysisBlock('[RISK ASSESSMENT]', riskText, 'amber');
-            }
-
-            // Clause-by-clause analysis
-            if (data.clause_analysis.length > 0) {
-                let clauseText = '<strong>CLAUSE-BY-CLAUSE ANALYSIS:</strong><br>';
-                data.clause_analysis.forEach(clause => {
-                    clauseText += `<br>• ${clause.clause}: <strong>${clause.status}</strong><br>`;
-                    if (clause.recommendation) {
-                        clauseText += `  Recommendation: ${clause.recommendation}<br>`;
-                    }
-                });
-                addAnalysisBlock('[DETAILED ANALYSIS]', clauseText, 'dim');
-            }
+            addAnalysisBlock('[LEGAL AUDIT REPORT]', formattedReport, 'amber');
 
         } else {
-            addAnalysisBlock('[ERROR]', result.message || 'Verification failed', 'dim');
+            addAnalysisBlock('[ERROR]', result.error || 'Verification failed', 'dim');
         }
 
     } catch (error) {
+        if (typeof loadingBlock !== 'undefined') loadingBlock.remove();
         addAnalysisBlock('[ERROR]', `Verification failed: ${error.message}`, 'dim');
     }
 

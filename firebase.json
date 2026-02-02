@@ -1,0 +1,14 @@
+{
+    "hosting": {
+        "public": "frontend-react/dist",
+        "rewrites": [
+            {
+                "source": "**",
+                "run": {
+                    "serviceId": "nyaya-sahayak-core",
+                    "region": "us-central1"
+                }
+            }
+        ]
+    }
+}

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nyaya-Sahayak - AI Legal First Responder</title>
-{% comment %} {% static "" %} {% endcomment %}
+    {% comment %} {% static "" %} {% endcomment %}
     <!-- CDN Links -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,7 +15,7 @@
         rel="stylesheet">
 
     <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="{% static "style.css" %}">
+    <link rel="stylesheet" href="{% static " style.css" %}">
 </head>
 
 <body>
@@ -27,7 +27,7 @@
     ======================================== -->
     <div id="intro-screen">
         <div class="constitution-image-container">
-            <img src="{% static "constitution.jpg" %}" alt="Constitution of India" class="constitution-image">
+            <img src="{% static " constitution.jpg" %}" alt="Constitution of India" class="constitution-image">
         </div>
         <div class="intro-tagline">
             Nyaya-Sahayak
@@ -72,24 +72,39 @@
 
                 <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center"
                     style="font-family: 'Space Grotesk', sans-serif;">
-                    <i class="fas fa-shield-alt mr-3"></i> UPLOAD EVIDENCE
+                    <i class="fas fa-gavel mr-3"></i> AI NOTICE GENERATOR
                 </h2>
 
                 <!-- STACKED LAYOUT (Top to Bottom) -->
 
                 <!-- 1. File Upload Zone (TOP) -->
-                <div class="upload-zone mb-6" id="upload-zone">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
+                <!-- 1. Legal Notice Form (TOP) -->
+                <div id="notice-form-container" class="mb-6 space-y-4 text-left">
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-yellow-500"
+                            style="font-family: 'Space Mono';">SENDER (YOU)</label>
+                        <input type="text" id="main-sender"
+                            class="w-full bg-black/40 border border-gray-600 rounded p-3 text-white focus:border-yellow-500 focus:outline-none"
+                            placeholder="e.g. Rahul Sharma">
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">Drop your documents here</h3>
-                    <p class="text-sm opacity-70 mb-4">
-                        PDF, Images, Rent Agreements, Bills, Receipts
-                    </p>
-                    <button class="btn-secondary">
-                        <i class="fas fa-folder-open mr-2"></i> Browse Files
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-yellow-500"
+                            style="font-family: 'Space Mono';">RECEIVER (OPPONENT)</label>
+                        <input type="text" id="main-receiver"
+                            class="w-full bg-black/40 border border-gray-600 rounded p-3 text-white focus:border-yellow-500 focus:outline-none"
+                            placeholder="e.g. Landlord / HDFC Bank">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-yellow-500"
+                            style="font-family: 'Space Mono';">COMPLAINT DETAILS</label>
+                        <textarea id="main-complaint" rows="4"
+                            class="w-full bg-black/40 border border-gray-600 rounded p-3 text-white focus:border-yellow-500 focus:outline-none"
+                            placeholder="Describe the issue (e.g., Security deposit not returned)..."></textarea>
+                    </div>
+                    <button id="btn-generate-main"
+                        class="w-full py-4 mt-4 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-black font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-amber-500/20">
+                        <i class="fas fa-bolt mr-2"></i> GENERATE NOTICE NOW
                     </button>
-                    <input type="file" id="file-input" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
                 </div>
 
                 <!-- 2. Voice Input Button (MIDDLE) -->
@@ -109,6 +124,18 @@
                     </button>
                     <p class="text-xs opacity-60 mt-2">
                         <i class="fas fa-language mr-2"></i> हिंदी/English // Voice or Text support
+                    </p>
+                </div>
+
+                <!-- 4. Legal Tools Access -->
+                <div class="text-center mt-6">
+                    <a href="/tools/notice-generator/"
+                        class="flex items-center justify-center w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-black font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-amber-500/20"
+                        style="text-decoration:none;">
+                        <i class="fas fa-gavel mr-2"></i> ACCESS LEGAL TOOLS
+                    </a>
+                    <p class="text-xs opacity-60 mt-2">
+                        Draft Notices, Zero-FIR, Find Lawyers
                     </p>
                 </div>
             </div>
@@ -342,7 +369,7 @@
     </div>
 
     <!-- Custom Script -->
-    <script src="{% static "script.js" %}"></script>
+    <script src="{% static " script.js" %}"></script>
 </body>
 
 </html>

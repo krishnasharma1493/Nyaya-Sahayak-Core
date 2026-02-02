@@ -1,0 +1,61 @@
+# Sample Indian Penal Code Extract  
+# For Testing Purposes Only
+
+## Indian Penal Code, 1860
+
+### Chapter XVII - Offences Against Property
+
+#### Section 378 - Theft
+Whoever, intending to take dishonestly any movable property out of the possession of any person without that person's consent, moves that property in order to such taking, is said to commit theft.
+
+**Explanation 1** - A thing so long as it is attached to the earth, not being movable property, is not the subject of theft; but it becomes capable of being the subject of theft as soon as it is severed from the earth.
+
+**Punishment**: Imprisonment up to 3 years, or fine, or both.
+
+---
+
+#### Section 379 - Punishment for theft
+Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both.
+
+---
+
+#### Section 420 - Cheating and dishonestly inducing delivery of property
+Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed, and which is capable of being converted into a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.
+
+**Key Points:**
+- Cheating with dishonest inducement
+- Delivery of property or valuable security
+- Maximum punishment: 7 years imprisonment + fine
+
+---
+
+### Chapter XVI - Offences Affecting the Human Body
+
+#### Section 323 - Punishment for voluntarily causing hurt
+Whoever, except in the case provided for by section 334, voluntarily causes hurt, shall be punished with imprisonment of either description for a term which may extend to one year, or with fine which may extend to one thousand rupees, or with both.
+
+---
+
+#### Section 324 - Voluntarily causing hurt by dangerous weapons or means
+Whoever, except in the case provided for by section 334, voluntarily causes hurt by means of any instrument for shooting, stabbing or cutting, or any instrument which, used as a weapon of offence, is likely to cause death, or by means of fire or any heated substance, or by means of any poison or any corrosive substance, or by means of any explosive substance, or by means of any substance which it is deleterious to the human body to inhale, to swallow, or to receive into the blood, or by means of any animal, shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both.
+
+---
+
+## Motor Vehicles Act, 1988 (Extract)
+
+### Chapter VIII - Control of Traffic
+
+#### Section 129 - Wearing of protective headgear
+Every person driving or riding (otherwise than in a sidecar, on a motor cycle of any class or description) shall, while in a public place, wear protective headgear conforming to the standards of Bureau of Indian Standards.
+
+**Penalty**: Section 177 MV Act - Fine up to ₹1,000 (first offense), ₹2,000 (subsequent offenses)
+
+---
+
+#### Section 183 - Driving at excessive speed
+Whoever drives a motor vehicle in contravention of the speed limits as provided in sections 112 and 113 shall be punished for a first offence with a fine of one thousand rupees and for a second or subsequent offence with a fine of two thousand rupees.
+
+---
+
+This is a SAMPLE document for testing the Nyaya-Sahayak legal AI system.
+Official legal texts should be consulted for actual legal advice.

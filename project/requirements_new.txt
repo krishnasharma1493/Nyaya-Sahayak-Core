@@ -1,0 +1,12 @@
+# Nyaya-Sahayak Dependencies (Gemini 1.5 Pro Version)
+# ===================================================
+
+# Core Framework
+Django==4.2.27
+django-cors-headers==4.3.1
+
+# Gemini AI (ONLY dependency for AI features!)
+google-generativeai>=0.3.0
+
+# Utilities
+python-dotenv==1.0.0

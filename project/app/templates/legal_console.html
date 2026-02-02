@@ -17,8 +17,9 @@
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=Courier+Prime:wght@400;700&family=Fira+Code:wght@300;400;600&display=swap"
         rel="stylesheet">
 
-    <!-- Legal Console Stylesheet -->
+    <!-- Legal Console Stylesheets -->
     <link rel="stylesheet" href="/static/legal_console.css">
+    <link rel="stylesheet" href="/static/legal_thinking_indicator.css">
 </head>
 
 <body>
@@ -47,6 +48,10 @@
             </div>
             <div class="status-right">
                 <span class="status-time" id="system-time"></span>
+                <a href="/dashboard/tools" class="btn-tools-access"
+                    style="margin: 0 15px; text-decoration:none; color:var(--neon-gold); border:1px solid var(--dim-amber); padding:6px 15px; font-family:'IBM Plex Mono'; font-size:0.8rem; letter-spacing:1px; background:rgba(255,191,0,0.1);">
+                    ACCESS LEGAL TOOLS <i class="fas fa-arrow-right"></i>
+                </a>
                 <button class="btn-minimize" onclick="window.close()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -64,6 +69,7 @@
 
                 <div class="pdf-viewer-container">
                     <!-- Upload Zone (shown when no document) -->
+                    <!-- Upload Zone (Restored) -->
                     <div class="upload-zone" id="upload-zone">
                         <i class="fas fa-cloud-upload-alt upload-icon"></i>
                         <h3>UPLOAD CONTRACT</h3>
@@ -152,7 +158,223 @@
     </div>
 
     <!-- Legal Console JavaScript -->
+    <script src="/static/legal_thinking_indicator.js"></script>
     <script src="/static/legal_console.js"></script>
+    <!-- PREVIEW MODAL -->
+    <div id="notice-preview-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-balance-scale"></i> LEGAL NOTICE PREVIEW</h3>
+                <button class="btn-close-modal" onclick="closeNoticeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="notice-content" class="legal-document-paper">
+                    <!-- Notice text goes here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-download" onclick="downloadNoticePDF()">
+                    <i class="fas fa-file-pdf"></i> DOWNLOAD PDF
+                </button>
+                <button class="btn-copy" onclick="copyNoticeText()">
+                    <i class="fas fa-copy"></i> COPY TEXT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inline CSS for Legal Form (simulating component styles) -->
+    <style>
+        .legal-notice-form {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 2px;
+            gap: 15px;
+            color: var(--neon-gold);
+        }
+
+        .form-header {
+            font-family: 'IBM Plex Mono';
+            font-size: 1.2rem;
+            color: var(--neon-gold);
+            border-bottom: 2px solid var(--dim-amber);
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 191, 0, 0.8);
+            letter-spacing: 1px;
+        }
+
+        .notice-input,
+        .notice-textarea {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--dim-amber);
+            color: #fff;
+            padding: 10px;
+            font-family: 'Courier Prime', monospace;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .notice-input:focus,
+        .notice-textarea:focus {
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 10px rgba(255, 191, 0, 0.2);
+            outline: none;
+        }
+
+        .notice-textarea {
+            flex-grow: 1;
+            /* Expand to fill space */
+            min-height: 150px;
+            resize: none;
+        }
+
+        .btn-generate-notice {
+            background: linear-gradient(135deg, #FFBF00 0%, #FFA500 100%);
+            border: none;
+            color: #000;
+            padding: 15px;
+            font-weight: bold;
+            font-family: 'IBM Plex Mono';
+            cursor: pointer;
+            border-radius: 4px;
+            transition: transform 0.2s;
+            margin-top: auto;
+            /* Push to bottom */
+        }
+
+        .btn-generate-notice:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 191, 0, 0.4);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #0a0a0a;
+            border: 2px solid var(--neon-gold);
+            width: 80%;
+            max-width: 800px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(255, 191, 0, 0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--dim-amber);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 191, 0, 0.05);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--neon-gold);
+            font-family: 'IBM Plex Mono';
+        }
+
+        .btn-close-modal {
+            background: none;
+            border: none;
+            color: var(--dim-amber);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .btn-close-modal:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #111;
+        }
+
+        .legal-document-paper {
+            background: #fff;
+            color: #000;
+            padding: 40px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            /* Preserve markdown formatting roughly */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            min-height: 100%;
+        }
+
+        .modal-footer {
+            padding: 15px;
+            border-top: 1px solid var(--dim-amber);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .btn-download,
+        .btn-copy {
+            padding: 10px 20px;
+            border: 1px solid var(--neon-gold);
+            background: transparent;
+            color: var(--neon-gold);
+            font-family: 'IBM Plex Mono';
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover {
+            background: var(--neon-gold);
+            color: #000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </body>
 
 </html>
