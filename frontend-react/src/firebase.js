@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDKEbBhqExIfGNsHPeYZQ90YBSftQy4Bgc",
+    apiKey: "AIzaSyADvsIXfgfoeQTtVO7J5xwcHbjUi7b31xc",
     authDomain: "nyaya-sahayak-core.firebaseapp.com",
     projectId: "nyaya-sahayak-core",
     storageBucket: "nyaya-sahayak-core.firebasestorage.app",

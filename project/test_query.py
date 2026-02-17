@@ -1,5 +1,6 @@
 import os
-os.environ['GEMINI_API_KEY'] = 'AIzaSyAQRK98O2VIy6_RiDxTKB4IOo-UvDJkI7o'
+from dotenv import load_dotenv
+load_dotenv()
 
 from app.legal_engine import get_legal_brain
 

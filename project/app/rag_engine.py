@@ -27,7 +27,7 @@ class LegalRAGEngine:
     
     def __init__(self):
         """Initialize RAG components with DUAL-STREAM GROUNDING"""
-        self.project_id = os.getenv('PROJECT_ID', 'project-4b18645b-e7c8-44c0-98f')
+        self.project_id = os.getenv('PROJECT_ID', '')
         self.location = os.getenv('LOCATION', 'us-central1')
         self.data_store_id = os.getenv('DATA_STORE_ID')  # Vertex AI Search data store
         self.api_key = os.getenv('GOOGLE_API_KEY')

@@ -1,8 +1,9 @@
 import os
-os.environ['GEMINI_API_KEY'] = 'AIzaSyAQRK98O2VIy6_RiDxTKB4IOo-UvDJkI7o'
+from dotenv import load_dotenv
+load_dotenv()
 
 import google.generativeai as genai
-genai.configure(api_key=os.environ['GEMINI_API_KEY'])
+genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 
 print("🗑️  Listing and deleting ALL caches...\n")
 
